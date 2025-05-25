@@ -1,1 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "primeicons/primeicons.css";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,body {
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  top: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+}
+
+/* Custom styles */
+:root {
+  --primary-color: #3B82F6;
+  --text-color: #1F2937;
+  --background-color: #FFFFFF;
+}
+
+[data-mode="dark-theme"] {
+  --primary-color: #60A5FA;
+  --text-color: #F3F4F6;
+  --background-color: #1F2937;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
