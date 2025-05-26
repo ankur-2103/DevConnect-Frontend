@@ -1,0 +1,45 @@
+<div class="flex justify-center items-center h-screen bg-gray-100">
+  <div class="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <app-input-wrapper
+        [control]="loginForm.get('email')"
+        [errorMessages]="{
+          required: 'Email is required',
+          email: 'Invalid email'
+        }"
+        label="Email"
+      >
+        <input
+          pInputText
+          formControlName="email"
+          class="w-full p-2 border rounded-md"
+        />
+      </app-input-wrapper>
+
+      <app-input-wrapper
+        [control]="loginForm.get('password')"
+        [errorMessages]="{
+          required: 'Password is required',
+          minlength: 'Min 6 characters'
+        }"
+        label="Password"
+      >
+        <input
+          pPassword
+          formControlName="password"
+          class="w-full p-2 border rounded-md"
+        />
+      </app-input-wrapper>
+
+      <button
+        pButton
+        type="submit"
+        label="Login"
+        class="w-full mt-2"
+        [disabled]="loginForm.invalid"
+      ></button>
+    </form>
+  </div>
+</div>
