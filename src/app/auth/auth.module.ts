@@ -10,7 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 import { AUTH_FEATURE_KEY, authReducer } from './store';
 import { AuthFacade } from './store/auth.facade';
-
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,8 @@ import { AuthFacade } from './store/auth.facade';
     InputWrapperComponent,
     AuthRoutingModule,
     ButtonModule,
+    InputTextModule,
+    PasswordModule
   ],
   providers:[AuthFacade]
 })

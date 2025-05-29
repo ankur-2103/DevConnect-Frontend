@@ -11,6 +11,7 @@ export class AuthFacade implements IAuthFacade {
 
   readonly authUser$ = this.store.select(AuthSelectors.selectAuthUser);
   readonly isLoggedIn$ = this.store.select(AuthSelectors.selectIsLoggedIn);
+  readonly errorMessage$ = this.store.select(AuthSelectors.selectErrorMessage);
   readonly isLoadingLogin$ = this.store.select(
     AuthSelectors.selectIsLoadingLogin
   );

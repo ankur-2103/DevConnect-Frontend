@@ -1,6 +1,13 @@
 <div class="flex justify-center items-center h-screen bg-gray-100">
   <div class="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
     <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
+    <!-- <p-button
+      type="button"
+      pRipple
+      (click)="showSuccess()"
+      label="Success"
+      severity="success"
+    /> -->
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <app-input-wrapper
@@ -26,12 +33,22 @@
         }"
         label="Password"
       >
-        <input
+        <!-- <input
           pPassword
           formControlName="password"
           class="w-full p-2 border rounded-md"
-        />
+        /> -->
+        <p-password formControlName="password" [feedback]="false" class="w-full" styleClass="w-full" inputStyleClass="w-full" [toggleMask]="true"></p-password>
       </app-input-wrapper>
+
+      <span
+        >Don't have account,
+        <span
+          [routerLink]="registerRoute"
+          class="cursor-pointer text-blue-600 font-semibold underline underline-offset-2"
+          >Register here!</span
+        >
+      </span>
 
       <button
         pButton

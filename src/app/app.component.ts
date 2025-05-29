@@ -11,7 +11,9 @@ import { AppRoutes } from './app.routes';
 import { StoreModule } from '@ngrx/store';
 import { AUTH_FEATURE_KEY, authReducer } from './auth/store';
 import { AuthFacade } from './auth/store/auth.facade';
-
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -22,15 +24,28 @@ import { AuthFacade } from './auth/store/auth.facade';
     ToolbarModule,
     TextareaModule,
     RouterModule,
+    ToastModule,
+    InputTextModule
   ],
+  providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements AfterViewInit {
-  _darkTheme = false;
+export class AppComponent {
+  _darkTheme: boolean = false;
 
-  // constructor(@Inject(DOCUMENT) private document: Document) {}
-  constructor(private _authFacade: AuthFacade) {}
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private _authFacade: AuthFacade,
+    private messageService: MessageService
+  ) {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Message Content',
+    });
+    // this.darkTheme = true
+  }
 
   // ngOnInit() {
   //   this._authFacade.checkLogin();
@@ -38,23 +53,24 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // initial theme to match system theme
-    // if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-    //   this.darkTheme = false;
-    // } else {
-    //   this.darkTheme = true;
-    // }
+    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      this.darkTheme = false;
+    } else {
+      this.darkTheme = true;
+    }
+    this.darkTheme = false
   }
 
-  // get darkTheme(): boolean {
-  //   return this._darkTheme;
-  // }
+  get darkTheme(): boolean {
+    return this._darkTheme;
+  }
 
-  // set darkTheme(value: boolean) {
-  //   this._darkTheme = value;
-  //   if (this._darkTheme) {
-  //     this.document.querySelector('html')?.classList.add('dark-theme');
-  //   } else {
-  //     this.document.querySelector('html')?.classList.remove('dark-theme');
-  //   }
-  // }
+  set darkTheme(value: boolean) {
+    this._darkTheme = value;
+    if (this._darkTheme) {
+      this.document.querySelector('html')?.classList.add('dark-theme');
+    } else {
+      this.document.querySelector('html')?.classList.remove('dark-theme');
+    }
+  }
 }

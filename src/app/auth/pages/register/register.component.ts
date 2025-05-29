@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AuthFacade } from '../../store/auth.facade';
+import { MessageService } from 'primeng/api';
+import { route } from '../../auth-routing.module';
 
 @Component({
   selector: 'app-register',
@@ -12,13 +14,14 @@ import { AuthFacade } from '../../store/auth.facade';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  loginRoute: string = route.login.url
 
   constructor(
     private fb: FormBuilder,
     private _authFacade: AuthFacade,
-    private _store: Store
+    private _store: Store,
+    private messageService: MessageService
   ) {
-    this._authFacade.checkLogin();
 
     this.registerForm = this.fb.group({
       username: ['test@test.com', [Validators.required, Validators.email]],
@@ -26,11 +29,7 @@ export class RegisterComponent {
       password: ['test@123', [Validators.required, Validators.minLength(6)]],
     });
 
-    this._store
-      .select((state) => state)
-      .subscribe((state) => {
-        console.log('Initial Store State:', state);
-      });
+    
   }
 
   onSubmit() {

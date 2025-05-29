@@ -1,17 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @import "primeicons/primeicons.css";
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer tailwind-base, primeng, tailwind-utilities;
+@layer tailwind-base {
+  @tailwind base;
+}
+@layer primeng;
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
 }
 
-html,body {
+
+
+// * {
+//   box-sizing: border-box;
+//   margin: 0;
+//   padding: 0;
+// }
+
+html,
+body {
   width: 100vw;
   height: 100vh;
 }
@@ -23,4 +32,8 @@ body {
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   overflow: hidden;
+}
+
+.p-panelmenu {
+  @apply gap-0;
 }

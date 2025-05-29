@@ -12,6 +12,7 @@ import {
 } from './auth.actions';
 import { AuthService } from '../auth.service';
 import { TokenStorageService } from '../../core/services';
+import { MessageService } from 'primeng/api';
 
 @Injectable()
 export class AuthEffects {
@@ -20,6 +21,7 @@ export class AuthEffects {
   private readonly authService = inject(AuthService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly tokenStorageService = inject(TokenStorageService);
+  private readonly messageService = inject(MessageService);
 
   readonly checkLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
@@ -49,6 +51,16 @@ export class AuthEffects {
                 data.accessToken,
                 data.accessToken
               );
+
+              setTimeout(() => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Success',
+                  detail: 'Message Content',
+                  life: 4000,
+                });
+              }, 2000);
+
               // Trigger login success action
               return LoginActions.success();
             }),
@@ -75,7 +87,15 @@ export class AuthEffects {
                 // Save tokens
                 // Trigger login success action
               }),
-              catchError((error) => of(LoginActions.failure({ error })))
+              catchError((error) => {
+                this.messageService.add({
+                  severity: 'error  ',
+                  summary: 'Success',
+                  detail: 'Message Content',
+                  life: 4000,
+                });
+                return of(LoginActions.failure({ error }));
+              })
             );
         })
       ),

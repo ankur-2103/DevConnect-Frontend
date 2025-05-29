@@ -14,4 +14,5 @@ export interface AuthStateModel {
   refreshTokenStatus: TokenStatus;
   isLoadingLogin: boolean;
   hasLoginError: boolean;
+  errorMessage: string;
 }

@@ -20,54 +20,88 @@ export const initialState: AuthStateModel = {
   refreshTokenStatus: TokenStatus.PENDING,
   isLoadingLogin: false,
   hasLoginError: false,
+  errorMessage: '',
 };
 
 export const authReducer = createReducer(
   initialState,
 
   // Login
-  on(LoginActions.login, (state): AuthStateModel => ({
-    ...state,
-    accessTokenStatus: TokenStatus.VALIDATING,
-    isLoadingLogin: true,
-    hasLoginError: false,
-  })),
+  on(
+    LoginActions.login,
+    (state): AuthStateModel => ({
+      ...state,
+      accessTokenStatus: TokenStatus.VALIDATING,
+      isLoadingLogin: true,
+      hasLoginError: false,
+      errorMessage: ''
+    })
+  ),
 
   // Refresh token
-  on(RefreshTokenActions.request, (state): AuthStateModel => ({
-    ...state,
-    refreshTokenStatus: TokenStatus.VALIDATING,
-  })),
+  on(
+    RefreshTokenActions.request,
+    (state): AuthStateModel => ({
+      ...state,
+      refreshTokenStatus: TokenStatus.VALIDATING,
+    })
+  ),
 
   // Login & Refresh token
-  on(LoginActions.success, RefreshTokenActions.success, (state): AuthStateModel => ({
-    ...state,
-    isLoggedIn: true,
-    isLoadingLogin: false,
-    accessTokenStatus: TokenStatus.VALID,
-    refreshTokenStatus: TokenStatus.VALID,
-  })),
+  on(
+    LoginActions.success,
+    RefreshTokenActions.success,
+    (state): AuthStateModel => ({
+      ...state,
+      isLoggedIn: true,
+      isLoadingLogin: false,
+      accessTokenStatus: TokenStatus.VALID,
+      refreshTokenStatus: TokenStatus.VALID,
+    })
+  ),
 
-  on(LoginActions.failure, RefreshTokenActions.failure, (state, action): AuthStateModel => ({
-    ...state,
-    isLoadingLogin: false,
-    accessTokenStatus: TokenStatus.INVALID,
-    refreshTokenStatus: TokenStatus.INVALID,
-    hasLoginError: action.type === LoginActions.failure.type && !!action.error,
-  })),
+  on(
+    LoginActions.failure,
+    RefreshTokenActions.failure,
+    (state, action): AuthStateModel => {
+      if (action.type === LoginActions.failure.type) {
+        console.log('Login Action Error:', action);
+      } else {
+        console.log('Refresh Token Action');
+      }
+      console.log('Action Type:', action.type);
+      return {
+        ...state,
+        isLoadingLogin: false,
+        accessTokenStatus: TokenStatus.INVALID,
+        refreshTokenStatus: TokenStatus.INVALID,
+        hasLoginError: action.type === LoginActions.failure.type && !!(action as any).error,
+        errorMessage: action.type === LoginActions.failure.type ? ((action as any).error?.error?.message || '') : ''
+      };
+    }
+  ),
 
   // Logout
-  on(LogoutAction, (): AuthStateModel => ({
-    ...initialState,
-  })),
+  on(
+    LogoutAction,
+    (): AuthStateModel => ({
+      ...initialState,
+    })
+  ),
 
   // Auth user
-  on(AuthUserActions.success, (state, action): AuthStateModel => ({
-    ...state,
-    user: action.user,
-  })),
+  on(
+    AuthUserActions.success,
+    (state, action): AuthStateModel => ({
+      ...state,
+      user: action.user,
+    })
+  ),
 
-  on(AuthUserActions.failure, (): AuthStateModel => ({
-    ...initialState,
-  }))
+  on(
+    AuthUserActions.failure,
+    (): AuthStateModel => ({
+      ...initialState,
+    })
+  )
 );

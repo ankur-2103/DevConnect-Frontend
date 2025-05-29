@@ -1,0 +1,67 @@
+<!-- Sidebar Container -->
+<div
+  class="md:min-w-44 h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col shadow-lg"
+>
+  <!-- Header -->
+  <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+    <img src="assets/logo.png" alt="DevConnect" class="h-10" />
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 overflow-y-auto py-4 px-2">
+    <ng-container *ngFor="let item of items">
+      <ng-template
+        [ngTemplateOutlet]="renderItem"
+        [ngTemplateOutletContext]="{ item: item, level: 0 }"
+      ></ng-template>
+    </ng-container>
+  </nav>
+
+  <!-- Footer -->
+  <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+    <div class="flex items-center space-x-3">
+      <div
+        class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center"
+      >
+        <i class="pi pi-user text-xl"></i>
+      </div>
+      <div>
+        <div class="font-semibold text-gray-900 dark:text-white">John Doe</div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">Developer</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recursive Template -->
+<ng-template #renderItem let-item="item" let-level="level">
+  <div class="mb-1" [style.paddingLeft.px]="level * 16">
+    <!-- Item Header -->
+    <div
+      class="flex items-center space-x-3 px-4 py-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+      (click)="toggle(item)"
+    >
+      <i
+        *ngIf="item.items?.length"
+        class="pi"
+        [ngClass]="item.expanded ? 'pi-chevron-down' : 'pi-chevron-right'"
+      ></i>
+      <i *ngIf="!item.items?.length" [class]="item.icon + ' text-lg'"></i>
+      <span class="text-sm">{{ item.label }}</span>
+    </div>
+
+    <!-- Nested Items with Tailwind Animation -->
+    <div
+      *ngIf="item.items?.length"
+      class="overflow-hidden transition-all duration-300 ease-in-out"
+      [ngClass]="item.expanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'"
+    >
+      <ng-container *ngFor="let child of item.items">
+        <ng-template
+          [ngTemplateOutlet]="renderItem"
+          [ngTemplateOutletContext]="{ item: child, level: level + 1 }"
+        ></ng-template>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
