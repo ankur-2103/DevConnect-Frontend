@@ -1,0 +1,120 @@
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import { AuthFacade } from '../../../../../auth/store/auth.facade';
+import { Store } from '@ngrx/store';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ProfileFormHandler } from '../../../../form-handlers/profile-form-handler.service';
+import { AuthUser } from '../../../../../auth/models';
+import { MessageService } from 'primeng/api';
+import { ProfileService } from '../../../../services/user.service';
+import { AuthUserActions } from '../../../../../auth/store/auth.actions';
+
+@Component({
+  selector: 'app-profile-update',
+  standalone: false,
+  templateUrl: './profile-update.component.html',
+  styleUrl: './profile-update.component.scss',
+})
+export class ProfileUpdateComponent implements OnChanges {
+  user: AuthUser = {
+    _id: '',
+    name: '',
+    bio: '',
+    skills: [],
+    avatar: '',
+    social: {
+      github: '',
+      linkedin: '',
+      twitter: '',
+      website: '',
+    },
+    roles: [],
+    createdAt: '',
+    updatedAt: '',
+  };
+
+  @Input() isOpen: boolean = false;
+  @Input() title: string = 'Update Profile';
+  @Input() closable: boolean = true;
+  @Output() isOpenChange = new EventEmitter<boolean>();
+  @Output() profileUpdated = new EventEmitter<void>();
+  profileUpdatedForm: FormGroup;
+
+  constructor(
+    private _authFacade: AuthFacade,
+    private _store: Store,
+    private _profileFormBuilder: ProfileFormHandler,
+    private messageService: MessageService,
+    private _fb: FormBuilder,
+    private _profileService: ProfileService
+  ) {
+    this.profileUpdatedForm = _profileFormBuilder.updateProfile(_fb);
+    this._authFacade.authUser$.subscribe((state) => {
+      if (state) {
+        this.user = state;
+        this.profileUpdatedForm = _profileFormBuilder.updateProfile(_fb, state);
+      }
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(this.isOpen);
+    if (changes['isOpen']) {
+      if (this.isOpen) {
+        // Reset form when dialog opens
+        // this._authFacade.authUser$.subscribe((state) => {
+        //   if (state) {
+        //     this.profileUpdatedForm = this._profileFormBuilder.updateProfile(this._fb, state);
+        //   }
+        // });
+      }
+    }
+  }
+
+  onSubmit() {
+    if (this.profileUpdatedForm.valid) {
+      const formValue = this.profileUpdatedForm.getRawValue();
+      this._profileService.updateMe(formValue).subscribe({
+        next: (updatedUser) => {
+          this._store.dispatch(AuthUserActions.success({ user: updatedUser }));
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Profile Updated',
+            detail: 'Your profile has been updated successfully!',
+            life: 4000,
+          });
+          this.profileUpdated.emit();
+          this.closeDialog();
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Update Failed',
+            detail:
+              error.message || 'Failed to update profile. Please try again.',
+            life: 4000,
+          });
+        },
+      });
+    }
+  }
+
+  closeDialog() {
+      this.isOpen = false;
+      this.isOpenChange.emit(false);
+      this.profileUpdatedForm = this._profileFormBuilder.updateProfile(
+        this._fb,
+        this.user
+      );
+  }
+
+  get skills() {
+    return this.user.skills ? this.user.skills : [];
+  }
+}

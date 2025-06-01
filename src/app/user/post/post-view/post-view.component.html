@@ -1,0 +1,117 @@
+<div class="bg-white rounded-lg shadow-md p-4">
+  <!-- Skeleton Loading -->
+  <div *ngIf="isLoading" class="flex flex-col gap-3">
+    <!-- Content Skeleton -->
+    <div class="flex flex-col gap-2">
+      <p-skeleton height="2rem" class="mb-2"></p-skeleton>
+      <p-skeleton height="1rem" class="mb-2"></p-skeleton>
+      <p-skeleton height="1rem" class="mb-2"></p-skeleton>
+      <p-skeleton height="1rem"></p-skeleton>
+    </div>
+
+    <!-- Footer Skeleton -->
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <p-skeleton shape="circle" size="2rem"></p-skeleton>
+        <p-skeleton height="1rem"></p-skeleton>
+      </div>
+      <p-skeleton height="1rem"></p-skeleton>
+    </div>
+  </div>
+  <!-- Actual Content -->
+  <div *ngIf="!isLoading && postData" class="flex flex-col gap-3">
+    <!-- User Info -->
+    <div class="flex items-center gap-2 mb-2">
+      <p-avatar
+        icon="pi pi-user"
+        shape="circle"
+        styleClass="bg-gray-200 text-gray-600"
+      ></p-avatar>
+      <span class="font-medium text-gray-900">{{ postData.userId.name }}</span>
+    </div>
+
+    <!-- Post Content -->
+    <div class="relative">
+      <div
+        #contentContainer
+        class="prose max-w-none break-words transition-all duration-300 ease-in-out"
+        [class.max-h-[200px]]="!isExpanded"
+        [class.overflow-hidden]="!isExpanded"
+      >
+        <div [innerHTML]="postData.content" class="ql-editor p-0"></div>
+      </div>
+      <!-- Gradient Fade -->
+      <div
+        *ngIf="hasOverflow"
+        class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none transition-opacity duration-300"
+        [class.opacity-0]="isExpanded"
+      ></div>
+    </div>
+
+    <!-- Expand/Collapse Button -->
+    <button
+      *ngIf="hasOverflow"
+      class="text-primary-600 hover:text-primary-700 text-sm font-medium hover:underline transition-colors"
+      (click)="toggleExpand()"
+    >
+      {{ isExpanded ? "Show less" : "Show more" }}
+    </button>
+
+    <!-- Post Footer -->
+    <div
+      class="flex justify-between items-center pt-2 border-t border-gray-100"
+    >
+      <div class="flex items-center gap-2">
+        <!-- Like Button -->
+        <button
+          pButton
+          type="button"
+          [icon]="isLiked ? 'pi pi-heart-fill' : 'pi pi-heart'"
+          [class.text-primary]="isLiked"
+          [class.text-gray-400]="!isLiked"
+          (click)="toggleLike()"
+          [disabled]="isLoading"
+          class="p-button-text p-button-rounded hover:bg-gray-100 transition-colors"
+        ></button>
+
+        <!-- Like Count -->
+        <span class="text-sm text-gray-500">
+          {{ likesCount }} {{ likesCount === 1 ? "like" : "likes" }}
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Edit and Delete Buttons (only for author or admin) -->
+        <button
+          *ngIf="canEditPost"
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          (click)="onEdit()"
+          [disabled]="isLoading"
+          class="p-button-text p-button-rounded hover:bg-gray-100 transition-colors"
+          pTooltip="Edit Post"
+        ></button>
+
+        <button
+          *ngIf="canEditPost"
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          (click)="onDelete($event)"
+          [disabled]="isLoading"
+          class="p-button-text p-button-rounded hover:bg-gray-100 transition-colors text-red-500"
+          pTooltip="Delete Post"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Post Dialog -->
+<app-post-handler
+  [(isOpen)]="isEditDialogOpen"
+  [postData]="postData"
+  (postUpdated)="onPostUpdated($event)"
+  (isOpenChange)="closeEditDialog()"
+></app-post-handler>

@@ -12,6 +12,14 @@
 }
 
 
+// ✅ QUILL CSS ISOLATED IMPORT
+/* isolate quill CSS from Tailwind */
+@layer quill {
+  @import "~quill/dist/quill.core.css";
+  @import "~quill/dist/quill.snow.css";
+  // or use "bubble.css" instead of "snow.css" if desired
+}
+
 
 // * {
 //   box-sizing: border-box;
@@ -32,6 +40,15 @@ body {
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   overflow: hidden;
+}
+
+/* styles.css or global styles */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .p-panelmenu {

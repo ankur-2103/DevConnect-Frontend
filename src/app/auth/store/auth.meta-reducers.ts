@@ -1,6 +1,7 @@
 import { ActionReducer, MetaReducer } from '@ngrx/store';
 import { AppState } from '../store'; // Adjust path if needed
 import { TokenStorageService } from '../../core/services/token-storage.service';
+import { TokenStatus } from '../models';
 
 const STORAGE_KEY = 'appState';
 
@@ -11,15 +12,16 @@ export function localStorageMetaReducer(reducer: ActionReducer<AppState>): Actio
     // Get the next state
     const nextState = reducer(state, action);
 
-    // Only save auth state
+    // Save auth state and user data
     if (nextState.auth) {
       const hasTokens = tokenStorage.getAccessToken() && tokenStorage.getRefreshToken();
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         auth: {
           isLoggedIn: hasTokens && nextState.auth.isLoggedIn,
-          accessTokenStatus: hasTokens ? nextState.auth.accessTokenStatus : 'INVALID',
-          refreshTokenStatus: hasTokens ? nextState.auth.refreshTokenStatus : 'INVALID'
+          accessTokenStatus: hasTokens ? nextState.auth.accessTokenStatus : TokenStatus.INVALID,
+          refreshTokenStatus: hasTokens ? nextState.auth.refreshTokenStatus : TokenStatus.INVALID,
+          user: nextState.auth.user // Store user data
         }
       }));
     }
@@ -44,8 +46,9 @@ export function hydrationMetaReducer(reducer: ActionReducer<AppState>): ActionRe
             auth: {
               ...parsed.auth,
               isLoggedIn: hasTokens && parsed.auth.isLoggedIn,
-              accessTokenStatus: hasTokens ? parsed.auth.accessTokenStatus : 'INVALID',
-              refreshTokenStatus: hasTokens ? parsed.auth.refreshTokenStatus : 'INVALID'
+              accessTokenStatus: hasTokens ? parsed.auth.accessTokenStatus : TokenStatus.INVALID,
+              refreshTokenStatus: hasTokens ? parsed.auth.refreshTokenStatus : TokenStatus.INVALID,
+              user: parsed.auth.user // Restore user data
             }
           };
         } catch {

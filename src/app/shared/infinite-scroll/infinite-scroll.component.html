@@ -1,0 +1,16 @@
+<div class="w-full relative">
+  <div class="w-full">
+    <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: items }">
+    </ng-container>
+    
+    <div *ngIf="loading" class="py-4 text-center text-gray-600">
+      Loading...
+    </div>
+    
+    <div *ngIf="!loading && items.length === 0" class="py-4 text-center text-gray-600">
+      No items found
+    </div>
+  </div>
+  
+  <div #loadMoreTrigger class="h-5 w-full"></div>
+</div> 

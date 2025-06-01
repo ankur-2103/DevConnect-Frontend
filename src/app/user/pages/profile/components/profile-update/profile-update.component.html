@@ -1,0 +1,127 @@
+<p-dialog
+  [(visible)]="isOpen"
+  [style]="{ width: '50vw' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="closable"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-xl font-bold">{{ title }}</h3>
+  </ng-template>
+
+  <form [formGroup]="profileUpdatedForm" (ngSubmit)="onSubmit()">
+    <div class="grid gap-4">
+      <app-input-wrapper
+        [control]="profileUpdatedForm.get('name')"
+        [errorMessages]="{
+          required: 'Name is required'
+        }"
+        label="Name"
+      >
+        <input
+          pInputText
+          formControlName="name"
+          class="w-full p-2 border rounded-md"
+        />
+      </app-input-wrapper>
+
+      <app-input-wrapper [control]="profileUpdatedForm.get('bio')" label="Bio">
+        <textarea
+          pInputTextarea
+          formControlName="bio"
+          class="w-full p-2 border rounded-md"
+          rows="3"
+        ></textarea>
+      </app-input-wrapper>
+
+      <!-- <app-input-wrapper
+                [control]="profileUpdatedForm.get('avatar')"
+                label="Avatar URL"
+            >
+                <input
+                    pInputText
+                    formControlName="avatar"
+                    class="w-full p-2 border rounded-md"
+                />
+            </app-input-wrapper> -->
+
+      <div formGroupName="social" class="grid gap-4">
+        <h4 class="font-semibold">Social Links</h4>
+
+        <app-input-wrapper
+          [control]="profileUpdatedForm.get('social.github')"
+          [errorMessages]="{
+            pattern: 'Invalid GitHub URL'
+          }"
+          label="GitHub"
+        >
+          <input
+            pInputText
+            formControlName="github"
+            class="w-full p-2 border rounded-md"
+          />
+        </app-input-wrapper>
+
+        <app-input-wrapper
+          [control]="profileUpdatedForm.get('social.linkedin')"
+          [errorMessages]="{
+            pattern: 'Invalid LinkedIn URL'
+          }"
+          label="LinkedIn"
+        >
+          <input
+            pInputText
+            formControlName="linkedin"
+            class="w-full p-2 border rounded-md"
+          />
+        </app-input-wrapper>
+
+        <app-input-wrapper
+          [control]="profileUpdatedForm.get('social.twitter')"
+          [errorMessages]="{
+            pattern: 'Invalid Twitter URL'
+          }"
+          label="Twitter"
+        >
+          <input
+            pInputText
+            formControlName="twitter"
+            class="w-full p-2 border rounded-md"
+          />
+        </app-input-wrapper>
+
+        <app-input-wrapper
+          [control]="profileUpdatedForm.get('social.website')"
+          [errorMessages]="{
+            pattern: 'Invalid Website URL'
+          }"
+          label="Website"
+        >
+          <input
+            pInputText
+            formControlName="website"
+            class="w-full p-2 border rounded-md"
+          />
+        </app-input-wrapper>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button
+        type="button"
+        label="Cancel"
+        [disabled]="!closable"
+        (onClick)="isOpen = false"
+        styleClass="p-button-text"
+      ></p-button>
+      <p-button
+        type="submit"
+        label="Update"
+        [disabled]="profileUpdatedForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

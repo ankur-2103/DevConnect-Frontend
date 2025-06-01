@@ -20,7 +20,7 @@ export class NoAuthGuard implements CanActivate {
     return this.authFacade.isLoggedIn$.pipe(
       // take(1),
       map((isLoggedIn) => {
-        return !isLoggedIn ? true : this.router.createUrlTree(['/']); // Redirect if logged in
+        return !isLoggedIn ? true : this.router.createUrlTree(['/user/feed']); // Redirect if logged in
       })
     );
   }

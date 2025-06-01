@@ -95,7 +95,6 @@ export class AuthService {
    * @returns {Observable<AuthUser>}
    */
   getAuthUser(): Observable<AuthUser> {
-    // return this.http.get<AuthUser>(`${this.hostUrl}/api/users/me`);
-    return of({id: 1, firstName: 'ankur', lastName: "ankur"});
+    return this.http.get<AuthUser>(`${this.hostUrl}/api/user/me`);
   }
 }

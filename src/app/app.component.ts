@@ -14,6 +14,8 @@ import { AuthFacade } from './auth/store/auth.facade';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -25,7 +27,8 @@ import { InputTextModule } from 'primeng/inputtext';
     TextareaModule,
     RouterModule,
     ToastModule,
-    InputTextModule
+    InputTextModule,
+    ConfirmDialogModule
   ],
   providers: [MessageService],
   templateUrl: './app.component.html',

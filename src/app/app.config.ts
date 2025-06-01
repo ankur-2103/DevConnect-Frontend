@@ -8,11 +8,18 @@ import { provideStore } from '@ngrx/store';
 import { AUTH_FEATURE_KEY, AuthEffects, authReducer } from './auth/store';
 import { AppRoutes } from './app.routes';
 import { provideEffects } from '@ngrx/effects';
-import { provideHttpClient } from '@angular/common/http';
-import { MessageService } from 'primeng/api';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { definePreset } from '@primeng/themes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { metaReducers } from './auth/store/auth.meta-reducers';
+import { authInterceptor } from './auth/interceptors';
+import { AUTH_FACADE } from './auth/tokens';
+import { AuthFacade } from './auth/store/auth.facade';
 
 const MyPreset = definePreset(Aura, {
   // semantic: {
@@ -89,7 +96,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideStore({ auth: authReducer }, { metaReducers: metaReducers }),
     provideEffects(AuthEffects),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(AppRoutes),
@@ -107,6 +114,11 @@ export const appConfig: ApplicationConfig = {
       },
       ripple: true,
     }),
+    {
+      provide: AUTH_FACADE,
+      useClass: AuthFacade
+    },
     MessageService,
+    ConfirmationService,
   ],
 };

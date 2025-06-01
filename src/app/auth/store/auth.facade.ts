@@ -6,7 +6,7 @@ import * as AuthSelectors from './auth.selectors';
 import { IAuthFacade } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class AuthFacade implements IAuthFacade {
+export class  AuthFacade implements IAuthFacade {
   private readonly store = inject(Store);
 
   readonly authUser$ = this.store.select(AuthSelectors.selectAuthUser);

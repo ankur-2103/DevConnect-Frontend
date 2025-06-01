@@ -1,0 +1,64 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Search Input -->
+  <div class="mb-6 w-full">
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search" />
+      <input
+        type="text"
+        pInputText
+        [formControl]="searchControl"
+        placeholder="Search users..."
+        class="w-full"
+      />
+    </p-iconfield>
+  </div>
+
+  <!-- User List -->
+  <div class="grid gap-4">
+    <app-infinite-scroll
+      [loadMoreData]="loadMoreUsers"
+      [itemTemplate]="userTemplate"
+      (itemSelected)="onUserSelected($event)"
+    >
+      <ng-template #userTemplate let-user>
+        <div
+          *ngFor="let user of users"
+          class="bg-white rounded-lg shadow p-4 flex items-center gap-4"
+        >
+          <!-- User Avatar -->
+          <div class="w-12 h-12 rounded-full overflow-hidden">
+            <p-avatar
+              icon="pi pi-user"
+              shape="circle"
+              styleClass="bg-gray-200 text-gray-600"
+            ></p-avatar>
+          </div>
+
+          <!-- User Info -->
+          <div class="flex-1">
+            <h3 class="font-semibold text-gray-900">{{ user.name }}</h3>
+            <p class="text-sm text-gray-600">{{ user.bio || "No bio" }}</p>
+          </div>
+
+          <!-- View Profile Button -->
+          <button
+            pButton
+            type="button"
+            label="View Profile"
+            icon="pi pi-user"
+            class="p-button-text"
+            [routerLink]="['/user', route.profileById.url, user._id]"
+          ></button>
+        </div>
+      </ng-template>
+    </app-infinite-scroll>
+  </div>
+
+  <!-- No Results -->
+  <div
+    *ngIf="searchControl.value && !isLoading && users.length === 0"
+    class="text-center py-8 text-gray-500"
+  >
+    No users found
+  </div>
+</div>

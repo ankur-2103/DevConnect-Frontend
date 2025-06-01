@@ -1,6 +1,27 @@
-<div class="bg-primary-600 text-primary-50 px-2 py-2 rounded-md shadow-md m-5 mt-4">
+<div
+  class="bg-primary-600 text-primary-50 px-2 py-2 rounded-md shadow-md m-5 mt-4"
+>
   <div class="flex justify-between items-center">
-    <span class="text-xl font-semibold">DevConnect</span>
-    <div class="flex items-center gap-4"></div>
+    <div class="flex items-center gap-4">
+      <!-- Mobile Menu Button -->
+      <button
+        pButton
+        type="button"
+        icon="pi pi-bars"
+        class="md:hidden"
+        (click)="onMenuClick()"
+      ></button>
+      <span class="text-xl font-semibold">DevConnect</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-sign-out"
+        label="Logout"
+        (click)="onLogout()"
+        class=""
+      ></button>
+    </div>
   </div>
 </div>

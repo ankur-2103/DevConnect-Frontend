@@ -13,7 +13,7 @@ export class HttpService {
 
   get<T>(endpoint: string, params?: any): Observable<T> {
     const httpParams = new HttpParams({ fromObject: params || {} });
-    return this.http.get<T>(`${this.baseUrl}${endpoint}`, { params: httpParams });
+    return this.http.get<T>(`${this.baseUrl}${endpoint}`, { params: httpParams  });
   }
 
   post<T>(endpoint: string, data: any): Observable<T> {

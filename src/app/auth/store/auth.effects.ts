@@ -108,7 +108,7 @@ export class AuthEffects {
       map(() => {
         // redirect to return url or home
         this.router.navigateByUrl(
-          this.activatedRoute.snapshot.queryParams['returnUrl'] || '/'
+          this.activatedRoute.snapshot.queryParams['returnUrl'] || '/user/feed'
         );
         return AuthUserActions.request();
       })
@@ -120,10 +120,8 @@ export class AuthEffects {
       return this.actions$.pipe(
         ofType(LogoutAction),
         exhaustMap(() => {
-          this.router.navigateByUrl('/');
-          return this.authService
-            .logout()
-            .pipe(finalize(() => this.tokenStorageService.removeTokens()));
+          this.router.navigateByUrl('/auth/login');
+          return of(null);
         })
       );
     },

@@ -24,8 +24,8 @@ export class LoginComponent {
     private messageService: MessageService
   ) {
     this.loginForm = this.fb.group({
-      email: ['test@test.com', [Validators.required, Validators.email]],
-      password: ['test@123', [Validators.required, Validators.minLength(6)]],
+      email: ['user@user.com', [Validators.required, Validators.email]],
+      password: ['user@123', [Validators.required, Validators.minLength(6)]],
     });
 
     this._store
