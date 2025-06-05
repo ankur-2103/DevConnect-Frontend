@@ -28,7 +28,6 @@ export function authInterceptor(
   if (accessToken) {
     // Add the Authorization header to the request
     req = req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } });
-    console.log('Request headers:', req.headers); // Debug log
   }
 
   return next(req).pipe(

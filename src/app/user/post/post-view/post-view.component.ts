@@ -5,6 +5,8 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { AuthFacade } from '../../../auth/store/auth.facade';
 import { AuthUser } from '../../../auth/models';
 import { RoleEnum } from '../../../core/enums/role.enum';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CommentsComponent } from '../comments/comments.component';
 
 @Component({
   selector: 'app-post-view',
@@ -27,12 +29,16 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
   isEditDialogOpen = false;
   isExpanded: boolean = false;
   hasOverflow: boolean = false;
+  isCommentsDialogOpen: boolean = false;
+  commentsCount: number = 0;
 
   constructor(
     private _postService: PostService,
     private _messageService: MessageService,
     private _authFacade: AuthFacade,
-    private _confirmationService: ConfirmationService
+    private _confirmationService: ConfirmationService,
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -220,5 +226,14 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
         });
       }
     });
+  }
+
+  toggleComments(): void {
+    this.isCommentsDialogOpen = !this.isCommentsDialogOpen;
+  }
+
+  visibleChange(value: boolean){
+    debugger
+    this.isCommentsDialogOpen = value;
   }
 }

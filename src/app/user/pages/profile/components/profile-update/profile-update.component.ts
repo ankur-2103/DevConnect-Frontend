@@ -14,6 +14,7 @@ import { AuthUser } from '../../../../../auth/models';
 import { MessageService } from 'primeng/api';
 import { ProfileService } from '../../../../services/user.service';
 import { AuthUserActions } from '../../../../../auth/store/auth.actions';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-profile-update',
@@ -26,7 +27,7 @@ export class ProfileUpdateComponent implements OnChanges {
     _id: '',
     name: '',
     bio: '',
-    skills: [],
+    skills: '',
     avatar: '',
     social: {
       github: '',
@@ -64,7 +65,6 @@ export class ProfileUpdateComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.isOpen);
     if (changes['isOpen']) {
       if (this.isOpen) {
         // Reset form when dialog opens
@@ -77,41 +77,79 @@ export class ProfileUpdateComponent implements OnChanges {
     }
   }
 
+
   onSubmit() {
     if (this.profileUpdatedForm.valid) {
       const formValue = this.profileUpdatedForm.getRawValue();
-      this._profileService.updateMe(formValue).subscribe({
-        next: (updatedUser) => {
-          this._store.dispatch(AuthUserActions.success({ user: updatedUser }));
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Profile Updated',
-            detail: 'Your profile has been updated successfully!',
-            life: 4000,
-          });
-          this.profileUpdated.emit();
-          this.closeDialog();
-        },
-        error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Update Failed',
-            detail:
-              error.message || 'Failed to update profile. Please try again.',
-            life: 4000,
-          });
-        },
-      });
+      const file = this.profileUpdatedForm.get('file')?.value;
+      
+      if (file) {
+        // Create FormData and append all form fields
+        const formData = new FormData();
+        Object.keys(formValue).forEach(key => {
+          if (key === 'social') {
+            formData.append(key, JSON.stringify(formValue[key]));
+          } else if (key !== 'file') { // Skip the file field as we'll append it separately
+            formData.append(key, formValue[key]);
+          }
+        });
+        formData.append('avatar', file);
+
+        this._profileService.updateMe(formData).subscribe({
+          next: (updatedUser) => {
+            this._store.dispatch(AuthUserActions.success({ user: updatedUser }));
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Profile Updated',
+              detail: 'Your profile has been updated successfully!',
+              life: 4000,
+            });
+            this.profileUpdated.emit();
+            this.closeDialog();
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Update Failed',
+              detail: error.message || 'Failed to update profile. Please try again.',
+              life: 4000,
+            });
+          },
+        });
+      } else {
+        // Handle regular form submission without file
+        this._profileService.updateMe(formValue).subscribe({
+          next: (updatedUser) => {
+            this._store.dispatch(AuthUserActions.success({ user: updatedUser }));
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Profile Updated',
+              detail: 'Your profile has been updated successfully!',
+              life: 4000,
+            });
+            this.profileUpdated.emit();
+            this.closeDialog();
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Update Failed',
+              detail: error.message || 'Failed to update profile. Please try again.',
+              life: 4000,
+            });
+          },
+        });
+      }
     }
   }
 
   closeDialog() {
-      this.isOpen = false;
-      this.isOpenChange.emit(false);
-      this.profileUpdatedForm = this._profileFormBuilder.updateProfile(
-        this._fb,
-        this.user
-      );
+    this.isOpen = false;
+    this.isOpenChange.emit(false);
+    this.profileUpdatedForm = this._profileFormBuilder.updateProfile(
+      this._fb,
+      this.user
+    );
   }
 
   get skills() {

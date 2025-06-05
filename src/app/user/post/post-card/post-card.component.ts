@@ -38,6 +38,8 @@ export class PostCardComponent implements OnInit, OnChanges {
   isEditDialogOpen = false;
   isExpanded: boolean = false;
   hasOverflow: boolean = false;
+  isCommentsDialogOpen: boolean = false;
+  commentsCount: number = 0;
 
   constructor(
     private _postService: PostService,
@@ -180,7 +182,7 @@ export class PostCardComponent implements OnInit, OnChanges {
 
   onDelete(event: Event) {
     if (!this.postData) return;
-    
+
     this._confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Are you sure you want to delete this post?',
@@ -208,7 +210,7 @@ export class PostCardComponent implements OnInit, OnChanges {
               detail: 'Failed to delete post',
               life: 4000,
             });
-          }
+          },
         });
       },
       reject: () => {
@@ -218,7 +220,16 @@ export class PostCardComponent implements OnInit, OnChanges {
           detail: 'Post deletion cancelled',
           life: 3000,
         });
-      }
+      },
     });
+  }
+
+  toggleComments(): void {
+    this.isCommentsDialogOpen = !this.isCommentsDialogOpen;
+  }
+
+  visibleChange(value: boolean) {
+    debugger;
+    this.isCommentsDialogOpen = value;
   }
 }

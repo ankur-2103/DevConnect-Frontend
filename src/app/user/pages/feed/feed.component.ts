@@ -80,6 +80,5 @@ export class FeedComponent implements OnInit {
     // - Navigate to post detail page
     // - Open post in a modal
     // - Update post state
-    console.log('Selected post:', post);
   }
 }

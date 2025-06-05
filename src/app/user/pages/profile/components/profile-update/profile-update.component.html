@@ -48,6 +48,31 @@
                 />
             </app-input-wrapper> -->
 
+      <p-fileupload
+        #fu
+        mode="basic"
+        chooseLabel="Choose"
+        chooseIcon="pi pi-upload"
+        name="demo[]"
+        accept="image/*"
+        maxFileSize="1000000"
+      />
+      
+      <app-input-wrapper
+        [control]="profileUpdatedForm.get('skills')"
+        [errorMessages]="{
+          required: 'Skills are required',
+          pattern: ''
+        }"
+        label="Skills (Note: comma seperated)"
+      >
+        <input
+          pInputText
+          formControlName="skills"
+          class="w-full p-2 border rounded-md"
+        />
+      </app-input-wrapper>
+
       <div formGroupName="social" class="grid gap-4">
         <h4 class="font-semibold">Social Links</h4>
 

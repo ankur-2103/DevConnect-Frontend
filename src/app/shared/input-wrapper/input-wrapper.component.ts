@@ -7,7 +7,7 @@ import { FormControl } from '@angular/forms';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="mb-4">
+    <div [class]="'mb-4 ' + containerClass">
       <label *ngIf="label" class="block text-sm font-medium mb-1">{{
         label
       }}</label>
@@ -25,6 +25,7 @@ export class InputWrapperComponent {
   @Input() control!: any;
   @Input() label?: string;
   @Input() errorMessages!: { [key: string]: string };
+  @Input() containerClass: string = '';
 
   get formControl(): FormControl | null {
     return this.control as FormControl;

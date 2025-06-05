@@ -15,7 +15,6 @@ export class UserComponent {
 
   constructor(private _authFacade: AuthFacade, private _store: Store) {
     this._authFacade.authUser$.subscribe((state) => {
-      console.log('Initial Store State:', state);
       if (state && (!state.name || state.name.trim() === '')) {
         this.showProfileUpdate = true;
         this.isProfileUpdateClosable = false;

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthFacade } from '../../store/auth.facade';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { filter, take } from 'rxjs';
+import { filter, Subject, take, takeUntil } from 'rxjs';
 import { route } from '../../auth-routing.module';
 
 @Component({
@@ -15,7 +15,8 @@ import { route } from '../../auth-routing.module';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  registerRoute: string = route.register.url
+  registerRoute: string = route.register.url;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -24,20 +25,15 @@ export class LoginComponent {
     private messageService: MessageService
   ) {
     this.loginForm = this.fb.group({
-      email: ['user@user.com', [Validators.required, Validators.email]],
-      password: ['user@123', [Validators.required, Validators.minLength(6)]],
+      email: ['test@test.com', [Validators.required, Validators.email]],
+      password: ['test@123', [Validators.required, Validators.minLength(6)]],
     });
-
-    this._store
-      .select((state) => state)
-      .subscribe((state) => {
-        console.log('Initial Store State:', state);
-      });
 
     this._authFacade.isLoggedIn$
       .pipe(
         filter((loggedIn) => loggedIn),
-        take(1)
+        take(1),
+        takeUntil(this.destroy$)
       )
       .subscribe(() => {
         this.messageService.add({
@@ -48,21 +44,24 @@ export class LoginComponent {
         });
       });
 
-    this._authFacade.errorMessage$.pipe().subscribe((message) => {
-      if (message !== '') {
+    this._authFacade.errorMessage$
+      .pipe(
+        filter((message) => message != '' && message != undefined),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((message) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Login Successful',
+          summary: 'Login Failed',
           detail: message,
           life: 4000,
         });
-      }
-    });
+        this._authFacade.clearError();
+      });
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
       const { email, password } = this.loginForm.value;
       this._authFacade.login(email as string, password as string);
     }

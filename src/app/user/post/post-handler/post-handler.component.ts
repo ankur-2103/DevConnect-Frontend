@@ -60,7 +60,6 @@ export class PostHandlerComponent implements OnChanges {
 
   onEditorChange(event: any) {
     const content = event.innerHTML;
-    console.log(event)
     // Check if content is effectively empty
     if (content === '<p></p>' || content === '') {
       this.postForm.get('content')?.setErrors({ required: true });

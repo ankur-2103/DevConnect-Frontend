@@ -12,7 +12,7 @@ export class ProfileService {
 
   constructor(private _httpService: HttpService) {}
 
-  updateMe(profileData: Partial<AuthUser>): Observable<AuthUser> {
+  updateMe(profileData: Partial<AuthUser> | FormData): Observable<AuthUser> {
     return this._httpService.put<AuthUser>(
       `${this.PROFILE_ENDPOINT}/me`,
       profileData

@@ -10,14 +10,25 @@
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <div class="flex items-start gap-6">
         <!-- Avatar -->
-        <div class="w-24 h-24 rounded-full overflow-hidden">
-          <p-avatar
-            [image]="user.avatar"
-            icon="pi pi-user"
-            shape="circle"
-            size="xlarge"
-            styleClass="bg-gray-200 text-gray-600"
-          ></p-avatar>
+        <div class="flex flex-col gap-4 justify-center items-center">
+          <div class="rounded-full overflow-hidden">
+            <p-avatar
+              [image]="user.avatar"
+              icon="pi pi-user"
+              shape="circle"
+              size="xlarge"
+              styleClass="bg-gray-200 text-gray-600"
+            ></p-avatar>
+          </div>
+          <!-- Edit Profile Button (only for own profile) -->
+          <p-button
+            *ngIf="canEditProfile"
+            type="button"
+            icon="pi pi-pencil"
+            label="Edit Profile"
+            styleClass="text-nowrap"
+            (click)="openUpdateDialog()"
+          ></p-button>
         </div>
 
         <!-- User Info -->
@@ -28,21 +39,13 @@
               <p class="text-gray-600 mt-1">{{ user.bio || "No bio" }}</p>
             </div>
 
-            <!-- Edit Profile Button (only for own profile) -->
-            <button
-              *ngIf="canEditProfile"
-              pButton
-              type="button"
-              icon="pi pi-pencil"
-              label="Edit Profile"
-              (click)="openUpdateDialog()"
-              class="p-button-text"
-            ></button>
+            <!-- <button pButton class="p-button-text text-nowrap w-fit"></button> -->
           </div>
 
           <!-- Skills -->
           <div class="mt-4">
-            <div class="flex flex-wrap gap-2">
+            <div class="flex items-center flex-wrap gap-2">
+              Skills: 
               <p-chip
                 *ngFor="let skill of skills"
                 [label]="skill"
@@ -52,38 +55,66 @@
           </div>
 
           <!-- Social Links -->
-          <div class="mt-4 flex gap-4">
+          <div class="mt-4 flex flex-wrap gap-4">
             <a
               *ngIf="user.social.github"
               [href]="user.social.github"
               target="_blank"
-              class="text-gray-600 hover:text-gray-900"
+              class="group"
             >
-              <i class="pi pi-github text-xl"></i>
+              <p-chip class="!py-0 !pl-0 !pr-2 !gap-0 align-middle">
+                <span
+                  class="bg-gray-600 text-white group-hover:text-black rounded-full w-8 h-8 flex items-center justify-center"
+                >
+                  <i class="pi pi-github"></i>
+                </span>
+                <span class="ml-1 text-sm"> Github </span>
+              </p-chip>
             </a>
             <a
               *ngIf="user.social.linkedin"
               [href]="user.social.linkedin"
               target="_blank"
-              class="text-gray-600 hover:text-gray-900"
+              class="group"
             >
-              <i class="pi pi-linkedin text-xl"></i>
+              <p-chip class="!py-0 !pl-0 !pr-2 !gap-0 align-middle">
+                <span
+                  class="bg-gray-600 text-white group-hover:text-blue-300 rounded-full w-8 h-8 flex items-center justify-center"
+                >
+                  <i class="pi pi-linkedin"></i>
+                </span>
+                <span class="ml-1 text-sm"> Linkedin </span>
+              </p-chip>
             </a>
             <a
               *ngIf="user.social.twitter"
               [href]="user.social.twitter"
               target="_blank"
-              class="text-gray-600 hover:text-gray-900"
+              class="group"
             >
-              <i class="pi pi-twitter text-xl"></i>
+              <p-chip class="!py-0 !pl-0 !pr-2 !gap-0 align-middle">
+                <span
+                  class="bg-gray-600 text-white group-hover:text-blue-300 rounded-full w-8 h-8 flex items-center justify-center"
+                >
+                  <i class="pi pi-twitter"></i>
+                </span>
+                <span class="ml-1 text-sm"> Twitter </span>
+              </p-chip>
             </a>
             <a
               *ngIf="user.social.website"
               [href]="user.social.website"
               target="_blank"
-              class="text-gray-600 hover:text-gray-900"
+              class="group"
             >
-              <i class="pi pi-globe text-xl"></i>
+              <p-chip class="!py-0 !pl-0 !pr-2 !gap-0 align-middle">
+                <span
+                  class="bg-gray-600 text-white group-hover:text-black rounded-full w-8 h-8 flex items-center justify-center"
+                >
+                  <i class="pi pi-globe"></i>
+                </span>
+                <span class="ml-1 text-sm"> Website </span>
+              </p-chip>
             </a>
           </div>
         </div>

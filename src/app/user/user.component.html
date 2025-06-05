@@ -7,14 +7,16 @@
   </div>
 </div> -->
 
-<div class="relative flex w-full bg-gray-100 antialiased">
+<div
+  class="relative flex w-full bg-gray-100 antialiased overflow-auto overflow-x-hidden min-h-screen"
+>
   <!-- Desktop Sidebar -->
   <aside class="sticky top-0 hidden h-full w-[250px] lg:block">
     <app-sidebar class="hidden md:block h-full"></app-sidebar>
   </aside>
 
-  <div class="relative w-full overflow-auto overflow-x-hidden" style="height: 100vh">
-    <app-header class="w-full" (menuClick)="toggleSidebar()"></app-header>
+  <div class="relative w-full overflow-auto overflow-x-hidden max-h-screen">
+    <app-header (menuClick)="toggleSidebar()"></app-header>
     <div class="m-4">
       <router-outlet></router-outlet>
     </div>
@@ -22,10 +24,7 @@
 </div>
 
 <!-- Mobile Sidebar -->
-<app-sidebar
-  class="md:hidden"
-  [visible]="sidebarVisible"
-></app-sidebar>
+<app-sidebar class="md:hidden" [visible]="sidebarVisible"></app-sidebar>
 
 <app-profile-update
   [isOpen]="showProfileUpdate"

@@ -30,7 +30,11 @@ import { PostViewComponent } from './post/post-view/post-view.component';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DrawerModule } from 'primeng/drawer';
-
+import { CommentsComponent } from './post/comments/comments.component';
+import { TimeAgoPipe } from '../shared/pipes/time-ago.pipe';
+import { ScrollerModule } from 'primeng/scroller';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 @NgModule({
   declarations: [
     UserComponent,
@@ -43,8 +47,10 @@ import { DrawerModule } from 'primeng/drawer';
     PostHandlerComponent,
     PostCardComponent,
     PostViewComponent,
+    CommentsComponent,
   ],
   imports: [
+    ImageCropperComponent,
     CommonModule,
     UserRoutingModule,
     PanelMenu,
@@ -64,6 +70,9 @@ import { DrawerModule } from 'primeng/drawer';
     IconFieldModule,
     InputIconModule,
     DrawerModule,
+    TimeAgoPipe,
+    ScrollerModule,
+    FileUploadModule,
   ],
 })
 export class UserModule {

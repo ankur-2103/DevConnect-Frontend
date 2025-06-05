@@ -1,0 +1,116 @@
+<p-dialog
+  [(visible)]="visible"
+  [style]="{ width: '50vw' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  (onShow)="loadMoreComments(1)"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-xl font-semibold">Comments</h3>
+  </ng-template>
+
+  <div class="comments-container">
+    <div class="comments-list">
+      <app-infinite-scroll
+        [loadMoreData]="loadMoreComments"
+        [itemTemplate]="commentTemplate"
+        (itemSelected)="onCommentSelected($event)"
+        [identifier]="'load-more-trigger-comment'"
+      >
+      </app-infinite-scroll>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="w-full">
+      <form
+        [formGroup]="commentForm"
+        (ngSubmit)="isEditing ? saveEdit() : addComment()"
+      >
+        <div class="flex items-center gap-3">
+          <app-input-wrapper
+            [control]="commentForm.get('content')"
+            [errorMessages]="{
+                required: 'Content is required',
+              }"
+            containerClass="!m-0"
+            class="flex-1"
+          >
+            <input
+              pInputText
+              formControlName="content"
+              [placeholder]="
+                isEditing ? 'Edit your comment...' : 'Write a comment...'
+              "
+              class="w-full"
+            />
+          </app-input-wrapper>
+          <p-button
+            type="submit"
+            [disabled]="commentForm.invalid"
+            [icon]="isEditing ? 'pi pi-save' : 'pi pi-send'"
+          >
+          </p-button>
+          <button
+            *ngIf="isEditing"
+            pButton
+            type="button"
+            icon="pi pi-times"
+            class="p-button-secondary"
+            (click)="cancelEdit()"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<ng-template #commentTemplate let-comment>
+  <div class="flex flex-col gap-3 ">
+    <div
+      *ngFor="let comment of comments"
+      class="p-2 shadow-md group rounded-md border border-gray-200 last:border-b-0"
+    >
+      <div class="flex justify-between items-center mb-2 border-b pb-2">
+        <div class="flex gap-2 items-center">
+          <p-avatar
+            icon="pi pi-user"
+            shape="circle"
+            styleClass="bg-gray-200 text-gray-600"
+          ></p-avatar>
+          <span class="font-semibold text-gray-900">{{
+            comment.userId.name
+          }}</span>
+        </div>
+        <span class="text-sm text-gray-500">
+          {{ comment.updatedAt | timeAgo }}
+        </span>
+      </div>
+      <div class="mb-2 relative">
+        <p class="text-gray-800 whitespace-pre-wrap">{{ comment.content }}</p>
+        <div
+          class="absolute hidden group-hover:flex justify-end gap-2 top-0 right-0"
+          *ngIf="canEditComment(comment)"
+        >
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            class="p-button-text p-button-rounded"
+            (click)="startEdit(comment)"
+          ></button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-rounded p-button-danger"
+            (click)="deleteComment($event, comment)"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

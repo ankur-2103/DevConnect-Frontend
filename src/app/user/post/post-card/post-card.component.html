@@ -21,8 +21,8 @@
   <!-- Actual Content -->
   <div *ngIf="!isLoading && postData" class="flex flex-col gap-3">
     <!-- Post Content -->
-    <div class="relative">
-      <div 
+    <div class="relative group">
+      <div
         #contentContainer
         class="prose max-w-none transition-all duration-300 ease-in-out min-h-[100px]"
         [class]="isExpanded ? 'max-h-none' : 'max-h-[100px] overflow-hidden'"
@@ -30,29 +30,56 @@
         <div [innerHTML]="postData.content"></div>
       </div>
       <!-- Gradient Fade -->
-      <div 
+      <div
         *ngIf="!isExpanded && hasOverflow"
         class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none"
       ></div>
+
+      <div class="hidden absolute top-0 right-0 group-hover:flex items-center gap-2">
+        <!-- Edit and Delete Buttons (only for author or admin) -->
+        <button
+          *ngIf="canEditPost"
+          pButton
+          type="button"
+          icon="pi pi-pencil"
+          (click)="onEdit()"
+          [disabled]="isLoading"
+          class="p-button-text p-button-rounded bg-gray-100 hover:bg-primary-100 transition-colors"
+          pTooltip="Edit Post"
+        ></button>
+
+        <button
+          *ngIf="canEditPost"
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          (click)="onDelete($event)"
+          [disabled]="isLoading"
+          class="p-button-text p-button-rounded bg-gray-100 hover:bg-primary-100 transition-colors text-red-500"
+          pTooltip="Delete Post"
+        ></button>
+      </div>
     </div>
-    
+
     <!-- Expand/Collapse Button -->
-    <button 
+    <button
       *ngIf="hasOverflow"
       class="text-primary-600 hover:text-primary-700 text-sm font-medium hover:underline transition-colors"
       (click)="toggleExpand()"
     >
-      {{ isExpanded ? 'Show less' : 'Show more' }}
+      {{ isExpanded ? "Show less" : "Show more" }}
     </button>
 
     <!-- Post Footer -->
-    <div class="flex justify-between items-center pt-2 border-t border-gray-100">
+    <div
+      class="flex justify-between items-center pt-2 border-t border-gray-100"
+    >
       <div class="flex items-center gap-2">
         <!-- Like Button -->
-        <button 
-          pButton 
-          type="button" 
-          [icon]="isLiked ? 'pi pi-heart-fill' : 'pi pi-heart'" 
+        <button
+          pButton
+          type="button"
+          [icon]="isLiked ? 'pi pi-heart-fill' : 'pi pi-heart'"
           [class.text-primary]="isLiked"
           [class.text-gray-400]="!isLiked"
           (click)="toggleLike()"
@@ -64,31 +91,19 @@
         <span class="text-sm text-gray-500">
           {{ likesCount }} {{ likesCount === 1 ? "like" : "likes" }}
         </span>
-      </div>
 
-      <div class="flex items-center gap-2">
-        <!-- Edit and Delete Buttons (only for author or admin) -->
-        <button 
-          *ngIf="canEditPost"
-          pButton 
-          type="button" 
-          icon="pi pi-pencil" 
-          (click)="onEdit()"
+        <p-button
+          type="button"
+          icon="pi pi-comments"
+          (click)="toggleComments()"
           [disabled]="isLoading"
-          class="p-button-text p-button-rounded hover:bg-gray-100 transition-colors"
-          pTooltip="Edit Post"
-        ></button>
+          [outlined]="true"
+          styleClass="border-0 rounded-full"
+        ></p-button>
 
-        <button 
-          *ngIf="canEditPost"
-          pButton 
-          type="button" 
-          icon="pi pi-trash" 
-          (click)="onDelete($event)"
-          [disabled]="isLoading"
-          class="p-button-text p-button-rounded hover:bg-gray-100 transition-colors text-red-500"
-          pTooltip="Delete Post"
-        ></button>
+        <span class="text-sm text-gray-500">
+          {{ commentsCount }} {{ commentsCount <= 1 ? "comment" : "comments" }}
+        </span>
       </div>
     </div>
   </div>
@@ -101,3 +116,11 @@
   (postUpdated)="onPostUpdated($event)"
   (isOpenChange)="closeEditDialog()"
 ></app-post-handler>
+
+<!-- Comments Dialog -->
+<app-comments
+  [(visible)]="isCommentsDialogOpen"
+  [postId]="postData?._id || ''"
+  [postOwnerId]="postData?.userId?._id || ''"
+  (visibleChange)="visibleChange($event)"
+></app-comments>
