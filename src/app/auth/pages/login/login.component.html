@@ -1,6 +1,6 @@
-<div class="flex justify-center items-center h-screen bg-gray-100">
+<div class="flex justify-center items-center h-screen bg-gray-100 p-4 md:p-0">
   <div class="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
+    <h2 class="text-2xl font-bold text-center mb-4 text-primary-800">Login</h2>
     <!-- <p-button
       type="button"
       pRipple
@@ -38,10 +38,17 @@
           formControlName="password"
           class="w-full p-2 border rounded-md"
         /> -->
-        <p-password formControlName="password" [feedback]="false" class="w-full" styleClass="w-full" inputStyleClass="w-full" [toggleMask]="true"></p-password>
+        <p-password
+          formControlName="password"
+          [feedback]="false"
+          class="w-full"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          [toggleMask]="true"
+        ></p-password>
       </app-input-wrapper>
 
-      <span
+      <span class="text-sm md:text-base"
         >Don't have account,
         <span
           [routerLink]="registerRoute"
