@@ -12,7 +12,7 @@ export class ProfileService {
 
   constructor(private _httpService: HttpService) {}
 
-  updateMe(profileData: Partial<AuthUser> | FormData): Observable<AuthUser> {
+  updateMe(profileData: FormData): Observable<AuthUser> {
     return this._httpService.put<AuthUser>(
       `${this.PROFILE_ENDPOINT}/me`,
       profileData
@@ -33,6 +33,8 @@ export class ProfileService {
   }
 
   getUserById(userId: string): Observable<AuthUser> {
-    return this._httpService.get<AuthUser>(`${this.PROFILE_ENDPOINT}/${userId}`);
+    return this._httpService.get<AuthUser>(
+      `${this.PROFILE_ENDPOINT}/${userId}`
+    );
   }
 }

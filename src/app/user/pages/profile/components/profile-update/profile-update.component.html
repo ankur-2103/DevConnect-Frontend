@@ -49,15 +49,16 @@
             </app-input-wrapper> -->
 
       <p-fileupload
-        #fu
         mode="basic"
         chooseLabel="Choose"
         chooseIcon="pi pi-upload"
         name="demo[]"
         accept="image/*"
         maxFileSize="1000000"
+        [multiple]="false"
+        (onSelect)="onFileSelect($event)"
       />
-      
+
       <app-input-wrapper
         [control]="profileUpdatedForm.get('skills')"
         [errorMessages]="{

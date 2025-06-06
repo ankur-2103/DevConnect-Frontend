@@ -35,6 +35,7 @@ import { TimeAgoPipe } from '../shared/pipes/time-ago.pipe';
 import { ScrollerModule } from 'primeng/scroller';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageCropperComponent } from 'ngx-image-cropper';
+import { ImageModule } from 'primeng/image';
 @NgModule({
   declarations: [
     UserComponent,
@@ -73,6 +74,7 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
     TimeAgoPipe,
     ScrollerModule,
     FileUploadModule,
+    ImageModule
   ],
 })
 export class UserModule {

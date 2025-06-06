@@ -23,12 +23,12 @@ export class PostService {
   }
 
   // Create new post
-  createPost(postData: Partial<PostView>): Observable<PostView> {
+  createPost(postData: FormData): Observable<PostView> {
     return this._httpService.post<PostView>(this.POSTS_ENDPOINT, postData);
   }
 
   // Update existing post
-  updatePost(id: string, postData: Partial<PostView>): Observable<PostView> {
+  updatePost(id: string, postData: FormData): Observable<PostView> {
     return this._httpService.put<PostView>(
       `${this.POSTS_ENDPOINT}/${id}`,
       postData

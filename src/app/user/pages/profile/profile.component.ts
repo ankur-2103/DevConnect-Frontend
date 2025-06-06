@@ -188,6 +188,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.isPostDialogOpen = false;
   }
 
+  onError(event: Event){
+    console.log(event);
+  }
+
   get skills(): string[] {
     return this.user.skills ? this.user.skills.split(',') : [];
   }

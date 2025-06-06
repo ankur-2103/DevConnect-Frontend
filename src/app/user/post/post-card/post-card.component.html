@@ -102,7 +102,7 @@
         ></p-button>
 
         <span class="text-sm text-gray-500">
-          {{ commentsCount }} {{ commentsCount <= 1 ? "comment" : "comments" }}
+          {{ postData.commentsCount }} {{ postData.commentsCount <= 1 ? "comment" : "comments" }}
         </span>
       </div>
     </div>
@@ -121,6 +121,7 @@
 <app-comments
   [(visible)]="isCommentsDialogOpen"
   [postId]="postData?._id || ''"
-  [postOwnerId]="postData?.userId?._id || ''"
+  [postOwnerId]="postData?.user?._id || ''"
   (visibleChange)="visibleChange($event)"
+  (commentCountHandler)="handleCommentCount($event)"
 ></app-comments>

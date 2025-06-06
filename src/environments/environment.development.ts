@@ -7,7 +7,7 @@ export const environment = {
 
   // Replace this with your server API URL
   // We assigned it to empty string for the Fake API
-  apiUrl: 'http://localhost:8080',
+  apiUrl: 'https://devconnect-backend-production.up.railway.app',
 
   settings: {
     auth: {

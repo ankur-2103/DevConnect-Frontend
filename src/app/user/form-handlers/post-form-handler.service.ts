@@ -10,14 +10,8 @@ export class PostFormHandler {
     return _fb.group({
       _id: [{ value: data?._id || '', disabled: !data?._id }],
       content: [data?.content || '', [Validators.required]],
-      docUrl: [
-        data?.docUrl || '',
-        [
-          Validators.pattern(
-            '^(https?://)?(www\\.)?[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\\.[a-zA-Z]{2,}(/\\S*)?$'
-          ),
-        ],
-      ],
+      docUrl: [data?.docUri || ''],
+      file: []
     });
   }
 }

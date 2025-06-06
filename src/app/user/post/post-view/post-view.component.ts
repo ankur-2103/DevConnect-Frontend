@@ -54,7 +54,7 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
         this.currentUserId = user._id;
         this.isAdmin = user.roles.includes(RoleEnum.admin.enum);
         if (this.postData) {
-          this.isAuthor = user._id === this.postData.userId._id;
+          this.isAuthor = user._id === this.postData.user._id;
         }
       } else {
         this.currentUserId = undefined;
@@ -79,13 +79,19 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
     if (!this.postData) return;
     this._authFacade.authUser$.subscribe((user: AuthUser | undefined) => {
       if (user) {
-        this.isAuthor = user._id === this.postData?.userId._id;
+        this.isAuthor = user._id === this.postData?.user._id;
         this.isAdmin = user.roles.includes(RoleEnum.admin.enum);
       } else {
         this.isAuthor = false;
         this.isAdmin = false;
       }
     });
+  }
+
+  handleCommentCount(value: number) {
+    if (this.postData) {
+      this.postData.commentsCount += value;
+    }
   }
 
   private checkContentOverflow() {

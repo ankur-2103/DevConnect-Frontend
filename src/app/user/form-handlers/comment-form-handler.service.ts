@@ -13,7 +13,7 @@ export class PostFormHandler {
       _id: [{ value: data?._id || '', disabled: !data?._id }],
       content: [data?.content || '', [Validators.required]],
       postId: [data?.postId || '', [Validators.required]],
-      userId: [data?.userId?._id || ''],
+      userId: [data?.user?._id || ''],
     });
   }
 }

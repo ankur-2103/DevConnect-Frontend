@@ -45,3 +45,9 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+.p-avatar-circle{
+  img{
+    @apply object-cover 
+  }
+}

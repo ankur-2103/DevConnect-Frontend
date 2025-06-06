@@ -25,7 +25,21 @@
       class="flex cursor-pointer items-center space-x-3"
     >
       <div class="rounded-full overflow-hidden">
-        <p-avatar icon="pi pi-user" size="large" shape="circle"></p-avatar>
+        @if(user?.avatar){
+        <p-avatar
+          [image]="user?.avatar"
+          shape="circle"
+          size="large"
+          styleClass="object-cover"
+        ></p-avatar>
+        }@else {
+        <p-avatar
+          icon="pi pi-user"
+          shape="circle"
+          size="large"
+          styleClass="bg-gray-200 text-gray-600"
+        ></p-avatar>
+        }
       </div>
       <div>
         <div class="font-semibold text-gray-900 dark:text-white">

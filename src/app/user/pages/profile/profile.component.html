@@ -7,18 +7,26 @@
   <!-- Profile Content -->
   <div *ngIf="!isLoading" class="max-w-4xl mx-auto">
     <!-- Profile Header -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-      <div class="flex items-start gap-6">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 relative md:static">
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
         <!-- Avatar -->
         <div class="flex flex-col gap-4 justify-center items-center">
           <div class="rounded-full overflow-hidden">
+            @if(user.avatar){
             <p-avatar
               [image]="user.avatar"
+              shape="circle"
+              size="xlarge"
+              styleClass="object-cover"
+            ></p-avatar>
+            }@else {
+            <p-avatar
               icon="pi pi-user"
               shape="circle"
               size="xlarge"
               styleClass="bg-gray-200 text-gray-600"
             ></p-avatar>
+            }
           </div>
           <!-- Edit Profile Button (only for own profile) -->
           <p-button
@@ -28,6 +36,7 @@
             label="Edit Profile"
             styleClass="text-nowrap"
             (click)="openUpdateDialog()"
+            class="hidden md:block"
           ></p-button>
         </div>
 
@@ -35,7 +44,11 @@
         <div class="flex-1">
           <div class="flex justify-between items-start">
             <div>
-              <h1 class="text-2xl font-bold text-gray-900">{{ user.name }}</h1>
+              <h1
+                class="text-2xl font-bold text-gray-900 text-center md:text-start"
+              >
+                {{ user.name }}
+              </h1>
               <p class="text-gray-600 mt-1">{{ user.bio || "No bio" }}</p>
             </div>
 
@@ -45,7 +58,7 @@
           <!-- Skills -->
           <div class="mt-4">
             <div class="flex items-center flex-wrap gap-2">
-              Skills: 
+              Skills:
               <p-chip
                 *ngFor="let skill of skills"
                 [label]="skill"
@@ -119,6 +132,14 @@
           </div>
         </div>
       </div>
+      <p-button
+        *ngIf="canEditProfile"
+        type="button"
+        icon="pi pi-pencil"
+        styleClass="text-nowrap rounded-full h-10 "
+        (click)="openUpdateDialog()"
+        class="block md:hidden top-4 right-4 absolute"
+      ></p-button>
     </div>
 
     <!-- Posts Section -->

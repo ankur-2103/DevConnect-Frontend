@@ -95,8 +95,8 @@ export const authReducer = createReducer(
         action.type === LoginActions.failure.type && !!(action as any).error,
       errorMessage:
         action.type === LoginActions.failure.type
-          ? (action as any).error?.error?.message || ''
-          : '',
+          ? (action as any).error?.error?.message || "Something wen't wrong"
+          : "Something wen't wrong",
     })
   ),
 

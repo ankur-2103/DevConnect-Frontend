@@ -15,6 +15,7 @@ import { MessageService } from 'primeng/api';
 import { PostService } from '../../services/post.service';
 import { finalize } from 'rxjs/operators';
 import { Editor } from 'primeng/editor';
+import { FileSelectEvent } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-post-handler',
@@ -58,6 +59,11 @@ export class PostHandlerComponent implements OnChanges {
     }
   }
 
+  onFileSelect(event: FileSelectEvent) {
+    const file = event.files[0];
+    this.postForm.get('file')?.setValue(file);
+  }
+
   onEditorChange(event: any) {
     const content = event.innerHTML;
     // Check if content is effectively empty
@@ -69,42 +75,56 @@ export class PostHandlerComponent implements OnChanges {
   onSubmit() {
     if (this.postForm.valid) {
       const formValue = this.postForm.getRawValue();
+      const file = this.postForm.get('file')?.value;
 
+      const formData = new FormData();
+      
+      // Append all form fields except file
+      Object.keys(formValue).forEach((key) => {
+        if (key !== 'file') {
+          formData.append(key, formValue[key]);
+        }
+      });
+
+      // Append file if it exists
+      if (file) {
+        formData.append('file', file);
+      }
+      debugger
       const request$ = this.postData
-        ? this._postService.updatePost(this.postData._id, formValue)
-        : this._postService.createPost(formValue);
+        ? this._postService.updatePost(this.postData._id, formData)
+        : this._postService.createPost(formData);
 
-      request$
-        .subscribe({
-          next: (post) => {
-            this._messageService.add({
-              severity: 'success',
-              summary: this.postData ? 'Post Updated' : 'Post Created',
-              detail: this.postData
-                ? 'Your post has been updated successfully!'
-                : 'Your post has been created successfully!',
-              life: 4000,
-            });
+      request$.subscribe({
+        next: (post) => {
+          this._messageService.add({
+            severity: 'success',
+            summary: this.postData ? 'Post Updated' : 'Post Created',
+            detail: this.postData
+              ? 'Your post has been updated successfully!'
+              : 'Your post has been created successfully!',
+            life: 4000,
+          });
 
-            // Emit the appropriate event
-            if (this.postData) {
-              this.postUpdated.emit(post);
-            } else {
-              this.postCreated.emit(post);
-            }
+          // Emit the appropriate event
+          if (this.postData) {
+            this.postUpdated.emit(post);
+          } else {
+            this.postCreated.emit(post);
+          }
 
-            this.closeDialog();
-          },
-          error: (error) => {
-            console.error('Error saving post:', error);
-            this._messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Failed to save post. Please try again.',
-              life: 4000,
-            });
-          },
-        });
+          this.closeDialog();
+        },
+        error: (error) => {
+          console.error('Error saving post:', error);
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to save post. Please try again.',
+            life: 4000,
+          });
+        },
+      });
     }
   }
 

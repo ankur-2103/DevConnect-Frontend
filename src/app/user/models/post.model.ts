@@ -2,7 +2,7 @@ export interface Post {
   _id: string;
   userId?: string;
   content: string;
-  docUrl: string;
+  docUri: string;
   likes: string[];
   createdAt: string;
   updatedAt: string;
@@ -16,10 +16,11 @@ export interface PostUser {
 
 export interface PostView {
   _id: string;
-  userId: PostUser;
+  user: PostUser;
   content: string;
-  docUrl: string;
+  docUri: string;
   likes: string[];
   createdAt: string;
   updatedAt: string;
+  commentsCount: number;
 }

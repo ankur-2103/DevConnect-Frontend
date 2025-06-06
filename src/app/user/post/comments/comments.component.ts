@@ -37,6 +37,7 @@ import { InfiniteScrollComponent } from '../../../shared/infinite-scroll/infinit
 export class CommentsComponent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
   @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() commentCountHandler = new EventEmitter<number>();
   @Input() postId: string = '';
   @Input() postOwnerId: string = '';
   @ViewChild(InfiniteScrollComponent)
@@ -197,6 +198,7 @@ export class CommentsComponent implements OnInit, OnChanges {
             detail: 'Comment added successfully',
             life: 3000,
           });
+          this.commentCountHandler.emit(1);
           return newComment;
         }),
         catchError((error) => {
@@ -298,6 +300,7 @@ export class CommentsComponent implements OnInit, OnChanges {
                 detail: 'Comment deleted successfully',
                 life: 3000,
               });
+              this.commentCountHandler.emit(-1);
             }),
             catchError((error) => {
               console.error('Error deleting comment:', error);
@@ -319,7 +322,7 @@ export class CommentsComponent implements OnInit, OnChanges {
   canEditComment(comment: CommentView): boolean {
     return Boolean(
       this.currentUserId &&
-        (this.currentUserId === comment.userId._id ||
+        (this.currentUserId === comment.user._id ||
           this.currentUserId === this.postOwnerId ||
           this.isAdmin)
     );
