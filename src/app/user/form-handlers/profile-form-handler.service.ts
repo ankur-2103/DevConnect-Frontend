@@ -11,7 +11,8 @@ export class ProfileFormHandler {
       name: [data?.name || '', Validators.required],
       bio: [data?.bio || ''],
       skills: [data?.skills || []],
-      // avatar: [data?.avatar || ''],
+      avatar: [data?.avatar || ''],
+      file: [],
       social: _fb.group({
         github: [
           data?.social?.github || '',

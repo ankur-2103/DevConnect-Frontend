@@ -13,6 +13,7 @@ export class InfiniteScrollComponent<T> implements OnInit, OnDestroy {
   @Input() initialPage: number = 1;
   @Input() rootMargin: string = '100px';
   @Input() threshold: number = 0.1;
+  @Input() identifier: string = 'load-more-trigger-default';
   @Output() itemSelected = new EventEmitter<T>();
 
   @ViewChild('loadMoreTrigger') loadMoreTrigger!: ElementRef;
@@ -100,7 +101,7 @@ export class InfiniteScrollComponent<T> implements OnInit, OnDestroy {
 
   async loadMore() {
     if (!this.loading && this.hasMore && !this.error) {
-      await this.loadData(this.currentPage + 1);
+    await this.loadData(this.currentPage + 1);
     }
   }
 
@@ -115,4 +116,4 @@ export class InfiniteScrollComponent<T> implements OnInit, OnDestroy {
     this.error = false;
     this.loadInitialData();
   }
-} 
+}

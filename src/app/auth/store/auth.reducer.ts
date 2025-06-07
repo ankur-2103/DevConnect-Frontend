@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import {
   AuthUserActions,
+  HandleErrors,
   LoginActions,
   LogoutAction,
   RefreshTokenActions,
@@ -34,7 +35,29 @@ export const authReducer = createReducer(
       accessTokenStatus: TokenStatus.VALIDATING,
       isLoadingLogin: true,
       hasLoginError: false,
-      errorMessage: ''
+      errorMessage: '',
+    })
+  ),
+
+  // Register
+  on(
+    LoginActions.register,
+    (state): AuthStateModel => ({
+      ...state,
+      accessTokenStatus: TokenStatus.VALIDATING,
+      isLoadingLogin: true,
+      hasLoginError: false,
+      errorMessage: '',
+    })
+  ),
+
+  //clear error
+  on(
+    HandleErrors.clear,
+    (state, action): AuthStateModel => ({
+      ...state,
+      hasLoginError: false,
+      errorMessage: '',
     })
   ),
 
@@ -63,22 +86,18 @@ export const authReducer = createReducer(
   on(
     LoginActions.failure,
     RefreshTokenActions.failure,
-    (state, action): AuthStateModel => {
-      if (action.type === LoginActions.failure.type) {
-        console.log('Login Action Error:', action);
-      } else {
-        console.log('Refresh Token Action');
-      }
-      console.log('Action Type:', action.type);
-      return {
-        ...state,
-        isLoadingLogin: false,
-        accessTokenStatus: TokenStatus.INVALID,
-        refreshTokenStatus: TokenStatus.INVALID,
-        hasLoginError: action.type === LoginActions.failure.type && !!(action as any).error,
-        errorMessage: action.type === LoginActions.failure.type ? ((action as any).error?.error?.message || '') : ''
-      };
-    }
+    (state, action): AuthStateModel => ({
+      ...state,
+      isLoadingLogin: false,
+      accessTokenStatus: TokenStatus.INVALID,
+      refreshTokenStatus: TokenStatus.INVALID,
+      hasLoginError:
+        action.type === LoginActions.failure.type && !!(action as any).error,
+      errorMessage:
+        action.type === LoginActions.failure.type
+          ? (action as any).error?.error?.message || "Something wen't wrong"
+          : "Something wen't wrong",
+    })
   ),
 
   // Logout

@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     _id: '',
     name: '',
     bio: '',
-    skills: [],
+    skills: '',
     avatar: '',
     social: {
       github: '',
@@ -43,7 +43,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   isOwnProfile: boolean = false;
   isLoading: boolean = true;
   private authSubscription: Subscription | null = null;
-  @ViewChild(InfiniteScrollComponent) infiniteScroll!: InfiniteScrollComponent<PostView>;
+  @ViewChild(InfiniteScrollComponent)
+  infiniteScroll!: InfiniteScrollComponent<PostView>;
 
   constructor(
     private _authFacade: AuthFacade,
@@ -54,7 +55,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this._route.params.subscribe(params => {
+    this._route.params.subscribe((params) => {
       const userId = params['id'];
       if (userId) {
         this.loadUserProfile(userId);
@@ -75,7 +76,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error loading user profile:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -90,7 +91,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private checkIfOwnProfile() {
-    this._authFacade.authUser$.subscribe(currentUser => {
+    this._authFacade.authUser$.subscribe((currentUser) => {
       this.isOwnProfile = currentUser?._id === this.user._id;
     });
   }
@@ -153,9 +154,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   onPostDeleted(postId: string) {
     // Create a new array reference to ensure change detection
-    const updatedPosts = [...this.posts].filter(post => post._id !== postId);
+    const updatedPosts = [...this.posts].filter((post) => post._id !== postId);
     this.posts = updatedPosts;
-    
+
     // If we have no posts left and we're not on page 1, reset to page 1
     if (this.posts.length === 0 && this.currentPage > 1) {
       this.currentPage = 1;
@@ -169,7 +170,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     // - Navigate to post detail page
     // - Open post in a modal
     // - Update post state
-    console.log('Selected post:', post);
   }
 
   openUpdateDialog() {
@@ -188,8 +188,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.isPostDialogOpen = false;
   }
 
-  get skills() {
-    return this.user.skills ? this.user.skills : [];
+  onError(event: Event){
+    console.log(event);
+  }
+
+  get skills(): string[] {
+    return this.user.skills ? this.user.skills.split(',') : [];
   }
 
   get canEditProfile(): boolean {

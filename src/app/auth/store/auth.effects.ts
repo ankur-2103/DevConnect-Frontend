@@ -41,7 +41,6 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(LoginActions.login),
       exhaustMap((credentials) => {
-        console.log('Effect triggered with credentials:', credentials);
         return this.authService
           .login(credentials.username, credentials.password)
           .pipe(
@@ -51,16 +50,6 @@ export class AuthEffects {
                 data.accessToken,
                 data.accessToken
               );
-
-              setTimeout(() => {
-                this.messageService.add({
-                  severity: 'success',
-                  summary: 'Success',
-                  detail: 'Message Content',
-                  life: 4000,
-                });
-              }, 2000);
-
               // Trigger login success action
               return LoginActions.success();
             }),
@@ -86,6 +75,7 @@ export class AuthEffects {
               map((data) => {
                 // Save tokens
                 // Trigger login success action
+                return LoginActions.success();
               }),
               catchError((error) => {
                 this.messageService.add({
@@ -99,7 +89,7 @@ export class AuthEffects {
             );
         })
       ),
-    { dispatch: false }
+    { dispatch: true }
   );
 
   readonly onLoginSuccess$ = createEffect(() => {

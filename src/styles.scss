@@ -14,11 +14,6 @@
 
 // ✅ QUILL CSS ISOLATED IMPORT
 /* isolate quill CSS from Tailwind */
-@layer quill {
-  @import "~quill/dist/quill.core.css";
-  @import "~quill/dist/quill.snow.css";
-  // or use "bubble.css" instead of "snow.css" if desired
-}
 
 
 // * {
@@ -27,20 +22,20 @@
 //   padding: 0;
 // }
 
-html,
-body {
-  width: 100vw;
-  height: 100vh;
-}
+// html,
+// body {
+//   width: 100vw;
+//   height: 100vh;
+// }
 
-body {
-  top: 0;
-  left: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  overflow: hidden;
-}
+// body {
+//   top: 0;
+//   left: 0;
+//   display: grid;
+//   grid-template-columns: 1fr;
+//   grid-template-rows: 1fr;
+//   overflow: hidden;
+// }
 
 /* styles.css or global styles */
 .scrollbar-hide {
@@ -51,6 +46,12 @@ body {
   display: none; /* Chrome, Safari, Opera */
 }
 
-.p-panelmenu {
-  @apply gap-0;
+.p-avatar-circle{
+  img{
+    @apply object-cover 
+  }
+}
+
+.p-toast{
+  @apply mx-4
 }

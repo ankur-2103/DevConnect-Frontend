@@ -73,6 +73,5 @@ export class SearchComponent implements OnInit {
 
   onUserSelected(user: AuthUser) {
     // Handle user selection, e.g., navigate to profile
-    console.log('Selected user:', user);
   }
 }

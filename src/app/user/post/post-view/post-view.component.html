@@ -22,12 +22,22 @@
   <div *ngIf="!isLoading && postData" class="flex flex-col gap-3">
     <!-- User Info -->
     <div class="flex items-center gap-2 mb-2">
+      @if(postData.user && postData.user.avatar != ''){
+      <p-avatar
+        [image]="postData.user.avatar"
+        shape="circle"
+        size="normal"
+        styleClass="object-cover"
+      ></p-avatar>
+      }@else {
       <p-avatar
         icon="pi pi-user"
         shape="circle"
+        size="normal"
         styleClass="bg-gray-200 text-gray-600"
       ></p-avatar>
-      <span class="font-medium text-gray-900">{{ postData.userId.name }}</span>
+      }
+      <span class="font-medium text-gray-900">{{ postData.user.name }}</span>
     </div>
 
     <!-- Post Content -->
@@ -38,7 +48,15 @@
         [class.max-h-[200px]]="!isExpanded"
         [class.overflow-hidden]="!isExpanded"
       >
-        <div [innerHTML]="postData.content" class="ql-editor p-0"></div>
+        <div
+          [innerHTML]="postData.content"
+          class="ql-editor p-0 !min-h-fit"
+        ></div>
+        @if(postData.docUri) {
+        <div class="mt-3">
+          <p-image [src]="postData.docUri" imageClass="object-" alt="Image" [preview]="true" />
+        </div>
+        }
       </div>
       <!-- Gradient Fade -->
       <div
@@ -78,6 +96,22 @@
         <span class="text-sm text-gray-500">
           {{ likesCount }} {{ likesCount === 1 ? "like" : "likes" }}
         </span>
+
+        <!-- Comment Button -->
+        <button
+          pButton
+          type="button"
+          icon="pi pi-comments"
+          (click)="toggleComments()"
+          [disabled]="isLoading"
+          class="p-button-text p-button-rounded hover:bg-gray-100 transition-colors ml-2"
+        ></button>
+
+        <!-- Comment Count -->
+        <span class="text-sm text-gray-500">
+          {{ postData.commentsCount }}
+          {{ postData.commentsCount === 1 ? "comment" : "comments" }}
+        </span>
       </div>
 
       <div class="flex items-center gap-2">
@@ -115,3 +149,12 @@
   (postUpdated)="onPostUpdated($event)"
   (isOpenChange)="closeEditDialog()"
 ></app-post-handler>
+
+<!-- Comments Dialog -->
+<app-comments
+  [(visible)]="isCommentsDialogOpen"
+  [postId]="postData?._id || ''"
+  [postOwnerId]="postData?.user?._id || ''"
+  (visibleChange)="visibleChange($event)"
+  (commentCountHandler)="handleCommentCount($event)"
+></app-comments>

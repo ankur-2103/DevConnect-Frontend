@@ -14,14 +14,21 @@
       <span class="text-xl font-semibold">DevConnect</span>
     </div>
     <div class="flex items-center gap-4">
-      <button
-        pButton
+      <p-button
         type="button"
         icon="pi pi-sign-out"
         label="Logout"
         (click)="onLogout()"
-        class=""
-      ></button>
+        class="md:block hidden"
+      >
+      </p-button>
+      <p-button
+        type="button"
+        icon="pi pi-sign-out"
+        (click)="onLogout()"
+        class="md:hidden block"
+      >
+      </p-button>
     </div>
   </div>
 </div>

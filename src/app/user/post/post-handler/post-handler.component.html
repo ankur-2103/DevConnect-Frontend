@@ -30,6 +30,17 @@
       </app-input-wrapper>
     </div>
 
+    <p-fileupload
+      mode="basic"
+      chooseLabel="Choose"
+      chooseIcon="pi pi-upload"
+      name="demo[]"
+      accept="image/*"
+      maxFileSize="1000000"
+      [multiple]="false"
+      (onSelect)="onFileSelect($event)"
+    />
+
     <div class="flex justify-end gap-2 mt-4">
       <p-button
         type="button"

@@ -1,12 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { LogoutAction, LoginActions, AuthUserActions } from './auth.actions';
+import {
+  LogoutAction,
+  LoginActions,
+  AuthUserActions,
+  HandleErrors,
+} from './auth.actions';
 import * as AuthSelectors from './auth.selectors';
 import { IAuthFacade } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class  AuthFacade implements IAuthFacade {
+export class AuthFacade implements IAuthFacade {
   private readonly store = inject(Store);
 
   readonly authUser$ = this.store.select(AuthSelectors.selectAuthUser);
@@ -22,22 +27,12 @@ export class  AuthFacade implements IAuthFacade {
   }
 
   login(username: string, password: string) {
-    this.store
-      .select((state) => state.auth)
-      .subscribe((authState) => {
-        console.log('Auth State:', authState);
-      });
-    console.log('Login action dispatched:', username, password);
+    this.store.select((state) => state.auth).subscribe((authState) => {});
     this.store.dispatch(LoginActions.login({ username, password }));
   }
 
   register(username: string, email: string, password: string) {
-    this.store
-      .select((state) => state.auth)
-      .subscribe((authState) => {
-        console.log('Auth State:', authState);
-      });
-    console.log('Login action dispatched:', username, password);
+    this.store.select((state) => state.auth).subscribe((authState) => {});
     this.store.dispatch(LoginActions.register({ username, email, password }));
   }
 
@@ -47,5 +42,9 @@ export class  AuthFacade implements IAuthFacade {
 
   getAuthUser() {
     this.store.dispatch(AuthUserActions.request());
+  }
+
+  clearError() {
+    this.store.dispatch(HandleErrors.clear());
   }
 }

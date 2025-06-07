@@ -38,6 +38,8 @@ export class PostCardComponent implements OnInit, OnChanges {
   isEditDialogOpen = false;
   isExpanded: boolean = false;
   hasOverflow: boolean = false;
+  isCommentsDialogOpen: boolean = false;
+  commentsCount: number = 0;
 
   constructor(
     private _postService: PostService,
@@ -59,7 +61,7 @@ export class PostCardComponent implements OnInit, OnChanges {
         this.currentUserId = user._id;
         this.isAdmin = user.roles.includes(RoleEnum.admin.enum);
         if (this.postData) {
-          this.isAuthor = user._id === this.postData.userId._id;
+          this.isAuthor = user._id === this.postData.user._id;
         }
       } else {
         this.currentUserId = undefined;
@@ -81,7 +83,7 @@ export class PostCardComponent implements OnInit, OnChanges {
     if (!this.postData) return;
     this._authFacade.authUser$.subscribe((user: AuthUser | undefined) => {
       if (user) {
-        this.isAuthor = user._id === this.postData?.userId._id;
+        this.isAuthor = user._id === this.postData?.user._id;
         this.isAdmin = user.roles.includes(RoleEnum.admin.enum);
       } else {
         this.isAuthor = false;
@@ -98,6 +100,12 @@ export class PostCardComponent implements OnInit, OnChanges {
         this.hasOverflow = element.scrollHeight > 100;
       }
     });
+  }
+
+  handleCommentCount(value: number) {
+    if (this.postData) {
+      this.postData.commentsCount += value;
+    }
   }
 
   private loadPost() {
@@ -180,7 +188,7 @@ export class PostCardComponent implements OnInit, OnChanges {
 
   onDelete(event: Event) {
     if (!this.postData) return;
-    
+
     this._confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Are you sure you want to delete this post?',
@@ -208,7 +216,7 @@ export class PostCardComponent implements OnInit, OnChanges {
               detail: 'Failed to delete post',
               life: 4000,
             });
-          }
+          },
         });
       },
       reject: () => {
@@ -218,7 +226,16 @@ export class PostCardComponent implements OnInit, OnChanges {
           detail: 'Post deletion cancelled',
           life: 3000,
         });
-      }
+      },
     });
+  }
+
+  toggleComments(): void {
+    this.isCommentsDialogOpen = !this.isCommentsDialogOpen;
+  }
+
+  visibleChange(value: boolean) {
+    debugger;
+    this.isCommentsDialogOpen = value;
   }
 }

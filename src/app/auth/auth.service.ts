@@ -32,7 +32,6 @@ export class AuthService {
    * @returns Observable<AccessData>
    */
   login(username: string, password: string): Observable<AccessData> {
-    console.log('API call triggered:', username, password);
     return this.http.post<AccessData>(`${this.hostUrl}/api/auth/signin`, {
       client_id: this.clientId,
       client_secret: this.clientSecret,
@@ -43,7 +42,6 @@ export class AuthService {
   }
 
   register(username: string, email: string, password: string): Observable<AccessData> {
-    console.log('API call triggered:', username, password);
     return this.http.post<AccessData>(`${this.hostUrl}/api/auth/signup`, {
       client_id: this.clientId,
       client_secret: this.clientSecret,

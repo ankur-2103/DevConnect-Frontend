@@ -5,6 +5,8 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { AuthFacade } from '../../../auth/store/auth.facade';
 import { AuthUser } from '../../../auth/models';
 import { RoleEnum } from '../../../core/enums/role.enum';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CommentsComponent } from '../comments/comments.component';
 
 @Component({
   selector: 'app-post-view',
@@ -27,12 +29,16 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
   isEditDialogOpen = false;
   isExpanded: boolean = false;
   hasOverflow: boolean = false;
+  isCommentsDialogOpen: boolean = false;
+  commentsCount: number = 0;
 
   constructor(
     private _postService: PostService,
     private _messageService: MessageService,
     private _authFacade: AuthFacade,
-    private _confirmationService: ConfirmationService
+    private _confirmationService: ConfirmationService,
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -48,7 +54,7 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
         this.currentUserId = user._id;
         this.isAdmin = user.roles.includes(RoleEnum.admin.enum);
         if (this.postData) {
-          this.isAuthor = user._id === this.postData.userId._id;
+          this.isAuthor = user._id === this.postData.user._id;
         }
       } else {
         this.currentUserId = undefined;
@@ -73,13 +79,19 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
     if (!this.postData) return;
     this._authFacade.authUser$.subscribe((user: AuthUser | undefined) => {
       if (user) {
-        this.isAuthor = user._id === this.postData?.userId._id;
+        this.isAuthor = user._id === this.postData?.user._id;
         this.isAdmin = user.roles.includes(RoleEnum.admin.enum);
       } else {
         this.isAuthor = false;
         this.isAdmin = false;
       }
     });
+  }
+
+  handleCommentCount(value: number) {
+    if (this.postData) {
+      this.postData.commentsCount += value;
+    }
   }
 
   private checkContentOverflow() {
@@ -220,5 +232,14 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
         });
       }
     });
+  }
+
+  toggleComments(): void {
+    this.isCommentsDialogOpen = !this.isCommentsDialogOpen;
+  }
+
+  visibleChange(value: boolean){
+    debugger
+    this.isCommentsDialogOpen = value;
   }
 }
