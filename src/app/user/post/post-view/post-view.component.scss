@@ -52,6 +52,8 @@
   .ql-editor {
     padding: 0;
     min-height: 100px;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
   .ql-container {

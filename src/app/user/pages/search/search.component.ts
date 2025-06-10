@@ -14,7 +14,7 @@ import { route } from '../../user-routing.module';
   styleUrl: './search.component.scss'
 })
 export class SearchComponent implements OnInit {
-  route = route; // Make route available in template
+  route = route;
   @ViewChild(InfiniteScrollComponent)
   infiniteScroll!: InfiniteScrollComponent<AuthUser>;
 

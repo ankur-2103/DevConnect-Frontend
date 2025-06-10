@@ -26,12 +26,22 @@
           class="bg-white rounded-lg shadow p-4 flex items-center gap-4"
         >
           <!-- User Avatar -->
-          <div class="w-12 h-12 rounded-full overflow-hidden">
+          <div class="rounded-full overflow-hidden">
+            @if(user && user.avatar != ''){
+            <p-avatar
+              [image]="user.avatar"
+              shape="circle"
+              size="normal"
+              styleClass="object-cover"
+            ></p-avatar>
+            }@else {
             <p-avatar
               icon="pi pi-user"
               shape="circle"
+              size="normal"
               styleClass="bg-gray-200 text-gray-600"
             ></p-avatar>
+            }
           </div>
 
           <!-- User Info -->

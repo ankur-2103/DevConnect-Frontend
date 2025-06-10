@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "npx angular-cli-ghpages --dir=dist/devconnect-frontend/browser"
+    "deploy": "ng build --base-href \"https://ankur-2103.github.io/DevConnect-Frontend/\" && npx angular-cli-ghpages --dir=dist/devconnect-frontend/browser"
   },
   "private": true,
   "dependencies": {
