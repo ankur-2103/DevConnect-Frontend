@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg shadow-md p-4">
+<div class="bg-white rounded-xl shadow-md p-4 pb-2">
   <!-- Skeleton Loading -->
   <div *ngIf="isLoading" class="flex flex-col gap-3">
     <!-- Content Skeleton -->
@@ -21,23 +21,28 @@
   <!-- Actual Content -->
   <div *ngIf="!isLoading && postData" class="flex flex-col gap-3">
     <!-- User Info -->
-    <div class="flex items-center gap-2 mb-2">
-      @if(postData.user && postData.user.avatar != ''){
-      <p-avatar
-        [image]="postData.user.avatar"
-        shape="circle"
-        size="normal"
-        styleClass="object-cover"
-      ></p-avatar>
-      }@else {
-      <p-avatar
-        icon="pi pi-user"
-        shape="circle"
-        size="normal"
-        styleClass="bg-gray-200 text-gray-600"
-      ></p-avatar>
-      }
-      <span class="font-medium text-gray-900">{{ postData.user.name }}</span>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 mb-2">
+        @if(postData.user && postData.user.avatar != ''){
+        <p-avatar
+          [image]="postData.user.avatar"
+          shape="circle"
+          size="normal"
+          styleClass="object-cover"
+        ></p-avatar>
+        }@else {
+        <p-avatar
+          icon="pi pi-user"
+          shape="circle"
+          size="normal"
+          styleClass="bg-gray-200 text-gray-600"
+        ></p-avatar>
+        }
+        <span class="font-medium text-gray-900">{{ postData.user.name }}</span>
+      </div>
+      <span class="text-sm text-gray-500">
+        {{ postData.createdAt | timeAgo }}
+      </span>
     </div>
 
     <!-- Post Content -->
@@ -77,7 +82,7 @@
 
     <!-- Post Footer -->
     <div
-      class="flex justify-between items-center pt-2 border-t border-gray-100"
+      class="flex justify-between items-center pt-2 border-t-2 border-gray-100"
     >
       <div class="flex items-center gap-2">
         <!-- Like Button -->

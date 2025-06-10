@@ -66,12 +66,4 @@ export class LoginComponent {
       this._authFacade.login(email as string, password as string);
     }
   }
-
-  showSuccess() {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Message Content',
-    });
-  }
 }
