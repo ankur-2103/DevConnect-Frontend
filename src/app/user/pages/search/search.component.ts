@@ -41,14 +41,14 @@ export class SearchComponent implements OnInit {
   loadMoreUsers = async (
     page: number
   ): Promise<{ items: AuthUser[]; hasMore: boolean }> => {
-    const query = this.searchControl.value;
+    const search = this.searchControl.value;
     this.isLoading = true;
-    if (!query) {
+    if (!search) {
       return { items: [], hasMore: false };
     }
 
     return new Promise((resolve, reject) => {
-      this._profileService.searchUsers(query, page).subscribe({
+      this._profileService.searchUsers(search, page).subscribe({
         next: (response: PaginatedResponse<AuthUser>) => {
           if (page === 1) {
             this.users = response.items;

@@ -25,9 +25,9 @@ export class RegisterComponent {
     private messageService: MessageService
   ) {
     this.registerForm = this.fb.group({
-      username: ['test@test.com', [Validators.required, Validators.email]],
-      email: ['test@test.com', [Validators.required, Validators.email]],
-      password: ['test@123', [Validators.required, Validators.minLength(6)]],
+      username: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
     this._authFacade.isLoggedIn$

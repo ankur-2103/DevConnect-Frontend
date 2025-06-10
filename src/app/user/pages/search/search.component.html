@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-0">
   <!-- Search Input -->
   <div class="mb-6 w-full">
     <p-iconfield>
@@ -18,36 +18,70 @@
     <app-infinite-scroll
       [loadMoreData]="loadMoreUsers"
       [itemTemplate]="userTemplate"
+      [loadingTemplate]="loadingTemplate"
       (itemSelected)="onUserSelected($event)"
+      [emptyMessage]="'No users found'"
     >
       <ng-template #userTemplate let-user>
-        <div
-          *ngFor="let user of users"
-          class="bg-white rounded-lg shadow p-4 flex items-center gap-4"
-        >
-          <!-- User Avatar -->
-          <div class="rounded-full overflow-hidden">
-            @if(user && user.avatar != ''){
-            <p-avatar
-              [image]="user.avatar"
-              shape="circle"
-              size="normal"
-              styleClass="object-cover"
-            ></p-avatar>
-            }@else {
-            <p-avatar
-              icon="pi pi-user"
-              shape="circle"
-              size="normal"
-              styleClass="bg-gray-200 text-gray-600"
-            ></p-avatar>
-            }
-          </div>
+        <div class="flex flex-col gap-2">
+          <div
+            *ngFor="let user of users"
+            class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row md:items-center gap-4"
+          >
+            <div class="flex flex-1 gap-4">
+              <!-- User Avatar -->
+              <div class="rounded-full overflow-hidden">
+                @if(user && user.avatar != ''){
+                <p-avatar
+                  [image]="user.avatar"
+                  shape="circle"
+                  size="large"
+                  styleClass="object-cover"
+                ></p-avatar>
+                }@else {
+                <p-avatar
+                  icon="pi pi-user"
+                  shape="circle"
+                  size="large"
+                  styleClass="bg-gray-200 text-gray-600"
+                ></p-avatar>
+                }
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-900">{{ user.name }}</h3>
+                <p class="text-sm line-clamp-2 text-gray-600">
+                  {{ user.bio || "No bio" }}
+                </p>
+              </div>
+            </div>
 
-          <!-- User Info -->
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">{{ user.name }}</h3>
-            <p class="text-sm text-gray-600">{{ user.bio || "No bio" }}</p>
+            <p-button
+              label="View Profile"
+              icon="pi pi-user"
+              class="w-full md:w-fit"
+              styleClass="w-full md:w-fit"
+              [routerLink]="['/user', route.profileById.url, user._id]"
+            ></p-button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #loadingTemplate>
+        <div class="bg-white rounded-lg shadow p-4 flex items-center gap-4">
+          <!-- User Avatar -->
+          <div class="flex flex-1 gap-4">
+            <div class="rounded-full overflow-hidden">
+              <p-skeleton shape="circle" size="3rem"></p-skeleton>
+            </div>
+
+            <!-- User Info -->
+            <div class="flex-1 flex flex-col">
+              <p-skeleton
+                height="2rem"
+                class="mb-2 !max-w-[160px]"
+              ></p-skeleton>
+              <p-skeleton height="1rem" class="mb-2"></p-skeleton>
+            </div>
           </div>
 
           <!-- View Profile Button -->
@@ -55,20 +89,12 @@
             pButton
             type="button"
             label="View Profile"
+            [loading]="true"
             icon="pi pi-user"
             class="p-button-text"
-            [routerLink]="['/user', route.profileById.url, user._id]"
           ></button>
         </div>
       </ng-template>
     </app-infinite-scroll>
-  </div>
-
-  <!-- No Results -->
-  <div
-    *ngIf="searchControl.value && !isLoading && users.length === 0"
-    class="text-center py-8 text-gray-500"
-  >
-    No users found
   </div>
 </div>

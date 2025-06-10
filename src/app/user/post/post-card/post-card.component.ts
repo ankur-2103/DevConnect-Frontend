@@ -18,6 +18,7 @@ import { AuthFacade } from '../../../auth/store/auth.facade';
 import { AuthUser } from '../../../auth/models';
 import { RoleEnum } from '../../../core/enums/role.enum';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-post-card',
@@ -28,6 +29,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class PostCardComponent implements OnInit, OnChanges {
   @Input() postId?: string;
   @Input() postData?: PostView;
+  @Input() showActions: boolean = true;
   @Output() postUpdated = new EventEmitter<PostView>();
   @Output() postDeleted = new EventEmitter<string>();
   @ViewChild('contentContainer') contentContainer!: ElementRef;
@@ -48,7 +50,8 @@ export class PostCardComponent implements OnInit, OnChanges {
     private _messageService: MessageService,
     private _authFacade: AuthFacade,
     private _confirmationService: ConfirmationService,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private _commonService: CommonService
   ) {}
 
   ngOnInit() {
@@ -97,12 +100,12 @@ export class PostCardComponent implements OnInit, OnChanges {
 
   private checkContentOverflow() {
     // Use setTimeout to ensure DOM is updated
-    setTimeout(() => {
-      if (this.contentContainer) {
-        const element = this.contentContainer.nativeElement;
-        this.hasOverflow = element.scrollHeight > 100;
-      }
-    });
+    // setTimeout(() => {
+    //   if (this.contentContainer) {
+    //     const element = this.contentContainer.nativeElement;
+    //     this.hasOverflow = element.scrollHeight > 100;
+    //   }
+    // });
   }
 
   handleCommentCount(value: number) {
@@ -258,7 +261,6 @@ export class PostCardComponent implements OnInit, OnChanges {
   }
 
   visibleChange(value: boolean) {
-    debugger;
     this.isCommentsDialogOpen = value;
   }
 

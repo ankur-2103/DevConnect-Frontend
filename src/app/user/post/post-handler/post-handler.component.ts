@@ -77,7 +77,7 @@ export class PostHandlerComponent implements OnChanges {
 
   onEditorChange(event: any) {
     let content = event.htmlValue;
-    debugger;
+    ;
     const editorElement = document.querySelector('#content .ql-editor');
     if (editorElement) {
       content = editorElement.innerHTML; // Includes classes like ql-list, ql-align, etc.
@@ -122,7 +122,6 @@ export class PostHandlerComponent implements OnChanges {
       if (file) {
         formData.append('file', file);
       }
-      debugger;
       const request$ = this.postData
         ? this._postService.updatePost(this.postData._id, formData)
         : this._postService.createPost(formData);

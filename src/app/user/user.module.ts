@@ -37,6 +37,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { ImageModule } from 'primeng/image';
 import { RippleModule } from 'primeng/ripple';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 @NgModule({
   declarations: [
     UserComponent,
@@ -50,6 +51,7 @@ import { RippleModule } from 'primeng/ripple';
     PostCardComponent,
     PostViewComponent,
     CommentsComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     ImageCropperComponent,

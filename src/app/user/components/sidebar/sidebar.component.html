@@ -12,6 +12,7 @@
   <nav class="flex-1 overflow-y-auto py-4 px-2">
     <ng-container *ngFor="let item of items">
       <ng-template
+        *ngIf="item.visible"
         [ngTemplateOutlet]="renderItem"
         [ngTemplateOutletContext]="{ item: item, level: 0 }"
       ></ng-template>
@@ -94,6 +95,7 @@
     >
       <ng-container *ngFor="let child of item.items">
         <ng-template
+          *ngIf="child.visible"
           [ngTemplateOutlet]="renderItem"
           [ngTemplateOutletContext]="{ item: child, level: level + 1 }"
         ></ng-template>
@@ -119,6 +121,7 @@
   <nav class="flex-1 overflow-y-auto py-4 px-2">
     <ng-container *ngFor="let item of items">
       <ng-template
+        *ngIf="item.visible"
         [ngTemplateOutlet]="renderItem"
         [ngTemplateOutletContext]="{ item: item, level: 0 }"
       ></ng-template>

@@ -35,7 +35,7 @@
         class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none"
       ></div>
 
-      <div class="md:hidden absolute flex top-0 right-0 group-hover:flex items-center gap-2">
+      <div *ngIf="showActions" class="md:hidden absolute flex top-0 right-0 group-hover:flex items-center gap-2">
         <!-- Edit and Delete Buttons (only for author or admin) -->
         <button
           *ngIf="canEditPost"

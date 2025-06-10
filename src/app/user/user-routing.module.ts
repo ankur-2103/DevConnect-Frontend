@@ -4,12 +4,15 @@ import { UserComponent } from './user.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { FeedComponent } from './pages/feed/feed.component';
 import { SearchComponent } from './pages/search/search.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { AdminGuard } from '../auth/guards';
 
 export const route = {
   profile: { path: 'profile', url: 'profile' },
   profileById: { path: 'profile/:id', url: 'profile' },
   feed: { path: 'feed', url: 'feed' },
   search: { path: 'search', url: 'search' },
+  admin: { path: 'admin', url: 'admin' },
 };
 
 const routes: Routes = [
@@ -19,7 +22,7 @@ const routes: Routes = [
     children: [
       {
         path: route.feed.path,
-        component: FeedComponent
+        component: FeedComponent,
       },
       {
         path: route.profile.path,
@@ -32,6 +35,11 @@ const routes: Routes = [
       {
         path: route.search.path,
         component: SearchComponent,
+      },
+      {
+        path: route.admin.path,
+        component: AdminDashboardComponent,
+        canActivate: [AdminGuard]
       },
     ],
   },

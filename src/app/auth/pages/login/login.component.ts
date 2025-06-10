@@ -25,8 +25,8 @@ export class LoginComponent {
     private messageService: MessageService
   ) {
     this.loginForm = this.fb.group({
-      email: ['test@test.com', [Validators.required, Validators.email]],
-      password: ['test@123', [Validators.required, Validators.minLength(6)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
     this._authFacade.isLoggedIn$

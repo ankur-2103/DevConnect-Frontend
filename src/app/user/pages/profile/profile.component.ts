@@ -11,6 +11,7 @@ import { InfiniteScrollComponent } from '../../../shared/infinite-scroll/infinit
 import { ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../services/user.service';
 import { RoleEnum } from '../../../core/enums/role.enum';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-profile',
@@ -51,7 +52,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private _store: Store,
     private _postService: PostService,
     private _profileService: ProfileService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _commonService: CommonService
   ) {}
 
   ngOnInit() {
@@ -111,13 +113,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return { items: [], hasMore: false };
     }
 
+    const prevPosts = this.posts
+    this.posts = [];
+
     return new Promise((resolve, reject) => {
       this._postService.getUserPosts(page, 10, this.user._id).subscribe({
         next: (response: PaginatedResponse<PostView>) => {
           if (page === 1) {
             this.posts = response.items;
           } else {
-            this.posts = [...this.posts, ...response.items];
+            this.posts = [...prevPosts, ...response.items];
           }
           resolve({
             items: response.items,
@@ -126,6 +131,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error loading posts:', error);
+          this.posts = prevPosts
           reject(error);
         },
       });
@@ -197,7 +203,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   get canEditProfile(): boolean {
-    return this.isOwnProfile || this.user.roles?.includes(RoleEnum.admin.enum);
+    return this.isOwnProfile || this._commonService.isAdmin;
   }
 
   get canCreatePost(): boolean {

@@ -85,7 +85,6 @@ export class ProfileUpdateComponent implements OnChanges {
 
   onSubmit() {
     if (this.profileUpdatedForm.valid) {
-      debugger
       const formValue = this.profileUpdatedForm.value;
       const file = this.profileUpdatedForm.get('file')?.value;
 

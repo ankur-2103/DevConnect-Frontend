@@ -19,6 +19,7 @@ import { RoleEnum } from '../../../core/enums/role.enum';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommentsComponent } from '../comments/comments.component';
 import { debounceTime } from 'rxjs';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-post-view',
@@ -51,7 +52,8 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
     private _authFacade: AuthFacade,
     private _confirmationService: ConfirmationService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _commonService: CommonService
   ) {}
 
   ngOnInit() {
@@ -273,7 +275,6 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   visibleChange(value: boolean) {
-    debugger;
     this.isCommentsDialogOpen = value;
   }
 }
