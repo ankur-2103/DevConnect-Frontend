@@ -17,6 +17,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { AuthFacade } from '../../../auth/store/auth.facade';
 import { AuthUser } from '../../../auth/models';
 import { RoleEnum } from '../../../core/enums/role.enum';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post-card',
@@ -32,6 +33,7 @@ export class PostCardComponent implements OnInit, OnChanges {
   @ViewChild('contentContainer') contentContainer!: ElementRef;
 
   isLoading = false;
+  isLikeLoading = false;
   isAuthor = false;
   isAdmin = false;
   currentUserId: string | undefined;
@@ -45,7 +47,8 @@ export class PostCardComponent implements OnInit, OnChanges {
     private _postService: PostService,
     private _messageService: MessageService,
     private _authFacade: AuthFacade,
-    private _confirmationService: ConfirmationService
+    private _confirmationService: ConfirmationService,
+    private _sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -145,7 +148,21 @@ export class PostCardComponent implements OnInit, OnChanges {
   }
 
   toggleLike() {
-    if (!this.currentUserId || !this.postData) return;
+    if (!this.currentUserId || !this.postData || this.isLikeLoading) return;
+
+    this.isLikeLoading = true;
+    // Optimistically update the UI
+    const originalLikes = [...(this.postData.likes || [])];
+    if (this.isLiked) {
+      this.postData.likes = (this.postData.likes || []).filter(
+        (id) => id !== this.currentUserId
+      );
+    } else {
+      this.postData.likes = [
+        ...(this.postData.likes || []),
+        this.currentUserId,
+      ];
+    }
 
     this._postService.toggleLike(this.postData._id).subscribe({
       next: (updatedPost) => {
@@ -153,6 +170,9 @@ export class PostCardComponent implements OnInit, OnChanges {
         this.checkContentOverflow();
       },
       error: (error) => {
+        if (this.postData) {
+          this.postData.likes = originalLikes;
+        }
         console.error('Error toggling like:', error);
         this._messageService.add({
           severity: 'error',
@@ -161,6 +181,9 @@ export class PostCardComponent implements OnInit, OnChanges {
           life: 4000,
         });
         this.isLoading = false;
+      },
+      complete: () => {
+        this.isLikeLoading = false;
       },
     });
   }
@@ -237,5 +260,11 @@ export class PostCardComponent implements OnInit, OnChanges {
   visibleChange(value: boolean) {
     debugger;
     this.isCommentsDialogOpen = value;
+  }
+
+  get postContent(): SafeHtml {
+    return this._sanitizer.bypassSecurityTrustHtml(
+      this.postData?.content || ''
+    );
   }
 }

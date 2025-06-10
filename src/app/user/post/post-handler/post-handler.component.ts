@@ -6,7 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
   ViewChild,
-  ElementRef
+  ElementRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PostFormHandler } from '../../form-handlers/post-form-handler.service';
@@ -31,8 +31,19 @@ export class PostHandlerComponent implements OnChanges {
   @Output() postCreated = new EventEmitter<PostView>();
   @Output() postUpdated = new EventEmitter<PostView>();
   @ViewChild('editor') editor!: Editor;
-  
+
   postForm: FormGroup;
+
+  editorModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'], // toggled buttons
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ header: [1, 2, 3, false] }],
+      ['link'], // only link, no image/video
+      [{ align: [] }],
+      ['clean'], // remove formatting
+    ],
+  };
 
   constructor(
     private _postFormHandler: PostFormHandler,
@@ -50,7 +61,7 @@ export class PostHandlerComponent implements OnChanges {
         this.postForm = this._postFormHandler.postForm(this._fb, this.postData);
         // Update title based on whether we're editing or creating
         this.title = this.postData ? 'Edit Post' : 'Create Post';
-        
+
         // Set editor content if editing
         if (this.postData?.content && this.editor?.quill?.root) {
           this.editor.quill.root.innerHTML = this.postData?.content || '';
@@ -65,7 +76,28 @@ export class PostHandlerComponent implements OnChanges {
   }
 
   onEditorChange(event: any) {
-    const content = event.innerHTML;
+    let content = event.htmlValue;
+    debugger;
+    const editorElement = document.querySelector('#content .ql-editor');
+    if (editorElement) {
+      content = editorElement.innerHTML; // Includes classes like ql-list, ql-align, etc.
+    }
+
+    const quillEditor = this.editor.getQuill();
+
+    if (quillEditor) {
+      // Get the full HTML content including attributes (like styles, classes)
+      const htmlContent = quillEditor.root.innerHTML;
+      console.log('HTML Output:', htmlContent);
+      this.postForm.get('content')?.setValue(htmlContent);
+      this.postForm.value
+    } else {
+      console.warn('Quill instance not found!');
+    }
+    
+    console.log("🚀 ~ PostHandlerComponent ~ onEditorChange ~ this.postForm.value:", this.postForm.value)
+
+
     // Check if content is effectively empty
     if (content === '<p></p>' || content === '') {
       this.postForm.get('content')?.setErrors({ required: true });
@@ -74,11 +106,11 @@ export class PostHandlerComponent implements OnChanges {
 
   onSubmit() {
     if (this.postForm.valid) {
-      const formValue = this.postForm.getRawValue();
+      const formValue = this.postForm.value;
       const file = this.postForm.get('file')?.value;
 
       const formData = new FormData();
-      
+
       // Append all form fields except file
       Object.keys(formValue).forEach((key) => {
         if (key !== 'file') {
@@ -90,7 +122,7 @@ export class PostHandlerComponent implements OnChanges {
       if (file) {
         formData.append('file', file);
       }
-      debugger
+      debugger;
       const request$ = this.postData
         ? this._postService.updatePost(this.postData._id, formData)
         : this._postService.createPost(formData);

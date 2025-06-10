@@ -21,6 +21,7 @@ export class SidebarComponent {
       icon: 'pi pi-home',
       routerLink: route.feed.url,
       routerLinkActiveOptions: { exact: true },
+      visible: false
     },
     {
       label: 'Search',

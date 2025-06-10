@@ -13,7 +13,7 @@ import {
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, FilterService, MessageService } from 'primeng/api';
 import { definePreset } from '@primeng/themes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { metaReducers } from './auth/store/auth.meta-reducers';
@@ -120,5 +120,6 @@ export const appConfig: ApplicationConfig = {
     },
     MessageService,
     ConfirmationService,
+    FilterService
   ],
 };

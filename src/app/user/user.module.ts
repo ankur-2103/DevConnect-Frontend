@@ -36,6 +36,7 @@ import { ScrollerModule } from 'primeng/scroller';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { ImageModule } from 'primeng/image';
+import { RippleModule } from 'primeng/ripple';
 @NgModule({
   declarations: [
     UserComponent,
@@ -74,7 +75,8 @@ import { ImageModule } from 'primeng/image';
     TimeAgoPipe,
     ScrollerModule,
     FileUploadModule,
-    ImageModule
+    ImageModule,
+    RippleModule
   ],
 })
 export class UserModule {
