@@ -8,7 +8,7 @@
 </div> -->
 
 <div
-  class="relative flex w-full bg-gray-100 antialiased overflow-auto overflow-x-hidden min-h-screen"
+  class="relative flex w-full bg-surface-200 antialiased overflow-auto overflow-x-hidden min-h-screen"
 >
   <!-- Desktop Sidebar -->
   <aside class="sticky top-0 hidden h-full w-[250px] lg:block">
@@ -17,7 +17,7 @@
 
   <div class="relative w-full overflow-auto overflow-x-hidden max-h-screen">
     <app-header (menuClick)="toggleSidebar()"></app-header>
-    <div class="m-4">
+    <div class="m-0">
       <router-outlet></router-outlet>
     </div>
   </div>

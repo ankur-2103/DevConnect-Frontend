@@ -12,7 +12,7 @@
   </ng-template>
 
   <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
-    <div class="grid gap-4">
+    <div class="grid gap-4 max-w-full">
       <app-input-wrapper
         [control]="postForm.get('content')"
         [errorMessages]="{

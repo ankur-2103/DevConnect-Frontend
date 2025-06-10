@@ -28,7 +28,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     RouterModule,
     ToastModule,
     InputTextModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
   ],
   providers: [MessageService],
   templateUrl: './app.component.html',
@@ -37,16 +37,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 export class AppComponent {
   _darkTheme: boolean = false;
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private _authFacade: AuthFacade,
-    private messageService: MessageService
-  ) {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Message Content',
-    });
+  constructor(@Inject(DOCUMENT) private document: Document) {
     // this.darkTheme = true
   }
 
@@ -61,7 +52,7 @@ export class AppComponent {
     } else {
       this.darkTheme = true;
     }
-    this.darkTheme = false
+    this.darkTheme = false;
   }
 
   get darkTheme(): boolean {

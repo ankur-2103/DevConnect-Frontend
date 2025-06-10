@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 export class InfiniteScrollComponent<T> implements OnInit, OnDestroy {
   @Input() loadMoreData!: (page: number) => Promise<{ items: T[], hasMore: boolean }>;
   @Input() itemTemplate!: any;
+  @Input() loadingTemplate!: any;
   @Input() initialPage: number = 1;
   @Input() rootMargin: string = '100px';
   @Input() threshold: number = 0.1;

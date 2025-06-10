@@ -78,12 +78,6 @@ export class AuthEffects {
                 return LoginActions.success();
               }),
               catchError((error) => {
-                this.messageService.add({
-                  severity: 'error  ',
-                  summary: 'Success',
-                  detail: 'Message Content',
-                  life: 4000,
-                });
                 return of(LoginActions.failure({ error }));
               })
             );
