@@ -42,7 +42,7 @@ export class AuthEffects {
       ofType(LoginActions.login),
       exhaustMap((credentials) => {
         return this.authService
-          .login(credentials.username, credentials.password)
+          .login(credentials.usernameOrEmail, credentials.password)
           .pipe(
             map((data) => {
               // Save tokens

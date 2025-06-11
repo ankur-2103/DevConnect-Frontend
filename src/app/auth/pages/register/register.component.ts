@@ -25,7 +25,7 @@ export class RegisterComponent {
     private messageService: MessageService
   ) {
     this.registerForm = this.fb.group({
-      username: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });

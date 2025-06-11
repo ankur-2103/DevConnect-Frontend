@@ -73,6 +73,32 @@
     </div>
     <!-- [modules]="editorModules"  -->
 
+    <div class="mb-6">
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <p-inputicon styleClass="pi pi-microchip-ai" />
+        </p-inputgroup-addon>
+        <input
+          type="text"
+          pInputText
+          formControlName="prompt"
+          placeholder="Generate with AI...."
+          class="w-full"
+        />
+        <p-inputgroup-addon>
+          <p-button 
+            [disabled]="!postForm.get('prompt')?.value || isGenerating" 
+            [loading]="isGenerating"
+            icon="pi pi-send" 
+            styleClass="h-full" 
+            class="h-full"
+            (onClick)="onGenratePost()"
+          >
+          </p-button>
+        </p-inputgroup-addon>
+      </p-inputgroup>
+    </div>
+
     <p-fileupload
       mode="basic"
       chooseLabel="Choose"

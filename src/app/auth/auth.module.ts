@@ -12,9 +12,11 @@ import { AUTH_FEATURE_KEY, authReducer } from './store';
 import { AuthFacade } from './store/auth.facade';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { ForgetPasswordComponent } from './pages/forget-password/forget-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
+  declarations: [LoginComponent, RegisterComponent, ForgetPasswordComponent, ResetPasswordComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -12,6 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../services/user.service';
 import { RoleEnum } from '../../../core/enums/role.enum';
 import { CommonService } from '../../services/common.service';
+import { MessageService } from 'primeng/api';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -41,11 +43,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   isPostDialogOpen: boolean = false;
   currentPage: number = 1;
   posts: PostView[] = [];
+  roles = Object.values(RoleEnum);
+  selectedRoles: number[] = [];
   isOwnProfile: boolean = false;
   isLoading: boolean = true;
+  isAdmin: boolean = false;
   private authSubscription: Subscription | null = null;
   @ViewChild(InfiniteScrollComponent)
   infiniteScroll!: InfiniteScrollComponent<PostView>;
+  loading: boolean = false;
+  updatingRoles: boolean = false;
 
   constructor(
     private _authFacade: AuthFacade,
@@ -53,12 +60,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private _postService: PostService,
     private _profileService: ProfileService,
     private _route: ActivatedRoute,
-    private _commonService: CommonService
+    private _commonService: CommonService,
+    private _messageService: MessageService,
+    private _authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.loading = true;
     this._route.params.subscribe((params) => {
       const userId = params['id'];
+      this.isAdmin = this._commonService.isAdmin;
       if (userId) {
         this.loadUserProfile(userId);
       } else {
@@ -72,6 +83,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this._profileService.getUserById(userId).subscribe({
       next: (user) => {
         this.user = user;
+        this.selectedRoles = user.roles;
         this.checkIfOwnProfile();
         this.isLoading = false;
       },
@@ -86,6 +98,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.authSubscription = this._authFacade.authUser$.subscribe((state) => {
       if (state) {
         this.user = state;
+        this.selectedRoles = state.roles;
         this.isOwnProfile = true;
         this.isLoading = false;
       }
@@ -113,7 +126,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return { items: [], hasMore: false };
     }
 
-    const prevPosts = this.posts
+    const prevPosts = this.posts;
     this.posts = [];
 
     return new Promise((resolve, reject) => {
@@ -131,7 +144,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error loading posts:', error);
-          this.posts = prevPosts
+          this.posts = prevPosts;
           reject(error);
         },
       });
@@ -194,7 +207,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.isPostDialogOpen = false;
   }
 
-  onError(event: Event){
+  onError(event: Event) {
     console.log(event);
   }
 
@@ -203,10 +216,60 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   get canEditProfile(): boolean {
-    return this.isOwnProfile || this._commonService.isAdmin;
+    return this.isOwnProfile || this.isAdmin;
   }
 
   get canCreatePost(): boolean {
     return this.isOwnProfile;
+  }
+
+  sortRoles() {
+    // Sort roles by enum value in descending order (admin: 103, moderator: 102, user: 101)
+    this.selectedRoles.sort((a, b) => a - b);
+  }
+
+  onRolesChange(event: any) {
+    if (!this.user._id || !this.isAdmin) return;
+
+    if (!this.selectedRoles || this.selectedRoles.length === 0) {
+      this._messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'At least one role must be selected',
+        life: 3000,
+      });
+      // Revert to previous roles
+      this.selectedRoles = this.user.roles;
+      return;
+    }
+
+    // Sort roles before updating
+
+    this.updatingRoles = true;
+    this._authService
+      .updateUserRoles(this.user._id, this.selectedRoles)
+      .subscribe({
+        next: (updatedUser) => {
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'User roles updated successfully',
+            life: 3000,
+          });
+          this.updatingRoles = false;
+        },
+        error: (error) => {
+          console.error('Error updating roles:', error);
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update user roles',
+            life: 3000,
+          });
+          // Revert to previous roles
+          this.selectedRoles = this.user.roles;
+          this.updatingRoles = false;
+        },
+      });
   }
 }

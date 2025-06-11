@@ -10,7 +10,7 @@ import { AuthUser } from '../models';
 export const LoginActions = createActionGroup({
   source: 'Auth: Login',
   events: {
-    login: props<{ username: string; password: string }>(),
+    login: props<{ usernameOrEmail: string; password: string }>(),
     register: props<{ username: string; email: string; password: string }>(),
     success: emptyProps(),
     failure: props<{ error: string }>(),

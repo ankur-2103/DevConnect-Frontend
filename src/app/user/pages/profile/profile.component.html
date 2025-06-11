@@ -81,11 +81,13 @@
         <div class="flex-1">
           <div class="flex justify-between items-start">
             <div>
-              <h1
-                class="text-2xl font-bold text-gray-900 text-center md:text-start"
-              >
-                {{ user.name }}
-              </h1>
+              <div>
+                <h1
+                  class="text-2xl font-bold text-gray-900 text-center md:text-start"
+                >
+                  {{ user.name }}
+                </h1>
+              </div>
               <p class="text-gray-600 mt-1">{{ user.bio || "No bio" }}</p>
             </div>
 
@@ -93,7 +95,7 @@
           </div>
 
           <!-- Skills -->
-          <div class="mt-4" *ngIf="skills.length ">
+          <div class="mt-4" *ngIf="skills.length">
             <div class="flex items-center flex-wrap gap-2">
               Skills:
               <p-chip
@@ -166,6 +168,27 @@
                 <span class="ml-1 text-sm"> Website </span>
               </p-chip>
             </a>
+          </div>
+
+          <div
+            *ngIf="!isOwnProfile && isAdmin"
+            class="mt-4 flex flex-wrap gap-2 items-center"
+          >
+            Roles:
+            <p-multiselect
+              [options]="roles"
+              [(ngModel)]="selectedRoles"
+              optionLabel="name"
+              optionValue="enum"
+              placeholder="Select Roles"
+              [maxSelectedLabels]="3"
+              [emptyMessage]="'Atleast one role should be assigned'"
+              styleClass="w-full md:w-80"
+              [loading]="updatingRoles"
+              [disabled]="updatingRoles"
+              (onPanelHide)="onRolesChange($event)"
+              (onChange)="sortRoles()"
+            />
           </div>
         </div>
       </div>

@@ -76,4 +76,14 @@ export class PostService {
       }
     );
   }
+
+  // Generate posts with AI
+  generatePost(prompt: string = ''): Observable<{ post: string }> {
+    return this._httpService.post<{ post: string }>(
+      `${this.POSTS_ENDPOINT}/generate`,
+      {
+        prompt,
+      }
+    );
+  }
 }

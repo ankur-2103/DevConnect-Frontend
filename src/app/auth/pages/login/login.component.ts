@@ -16,6 +16,7 @@ import { route } from '../../auth-routing.module';
 export class LoginComponent {
   loginForm: FormGroup;
   registerRoute: string = route.register.url;
+  forgotPasswordRoute: string = route.forgotPassword.url;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -25,7 +26,7 @@ export class LoginComponent {
     private messageService: MessageService
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      usernameOrEmail: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
@@ -62,8 +63,8 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this._authFacade.login(email as string, password as string);
+      const { usernameOrEmail, password } = this.loginForm.value;
+      this._authFacade.login(usernameOrEmail as string, password as string);
     }
   }
 }
