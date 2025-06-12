@@ -13,6 +13,8 @@ export const LoginActions = createActionGroup({
     login: props<{ usernameOrEmail: string; password: string }>(),
     register: props<{ username: string; email: string; password: string }>(),
     success: emptyProps(),
+    registerSuccess: emptyProps(),
+    clearIsRegister: emptyProps(),
     failure: props<{ error: string }>(),
     checkLogin: emptyProps(),
   },

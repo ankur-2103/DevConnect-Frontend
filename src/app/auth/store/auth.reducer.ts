@@ -16,6 +16,7 @@ export interface AuthPartialState {
 
 export const initialState: AuthStateModel = {
   isLoggedIn: false,
+  isRegistered: false,
   user: undefined,
   accessTokenStatus: TokenStatus.PENDING,
   refreshTokenStatus: TokenStatus.PENDING,
@@ -48,6 +49,28 @@ export const authReducer = createReducer(
       isLoadingLogin: true,
       hasLoginError: false,
       errorMessage: '',
+    })
+  ),
+
+  // Register success
+  on(
+    LoginActions.registerSuccess,
+    (state): AuthStateModel => ({
+      ...state,
+      accessTokenStatus: TokenStatus.PENDING,
+      isLoadingLogin: false,
+      isRegistered: true,
+      hasLoginError: false,
+      errorMessage: '',
+    })
+  ),
+
+  //Clear Register success
+  on(
+    LoginActions.clearIsRegister,
+    (state): AuthStateModel => ({
+      ...state,
+      isRegistered: false,
     })
   ),
 
