@@ -120,6 +120,7 @@ export class PostHandlerComponent implements OnChanges {
       next: (response) => {
         if (this.editor) {
           this.editor.writeValue(response.post);
+          this.postForm.get('content')?.setValue(response.post);
         }
       },
       error: (error) => {
