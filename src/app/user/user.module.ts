@@ -42,6 +42,7 @@ import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ScrollService } from '../core/services';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     InputGroupModule,
     MultiSelectModule,
   ],
+  providers: [ScrollService]
 })
 export class UserModule {
   constructor(private _authFacade: AuthFacade) {

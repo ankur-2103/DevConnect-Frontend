@@ -20,6 +20,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CommentsComponent } from '../comments/comments.component';
 import { debounceTime } from 'rxjs';
 import { CommonService } from '../../services/common.service';
+import { route } from '../../user-routing.module';
 
 @Component({
   selector: 'app-post-view',
@@ -34,6 +35,7 @@ export class PostViewComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() postUpdated = new EventEmitter<PostView>();
   @Output() postDeleted = new EventEmitter<string>();
   @ViewChild('contentContainer') contentContainer!: ElementRef;
+  route = route
 
   isLoading = false;
   isLikeLoading = false;

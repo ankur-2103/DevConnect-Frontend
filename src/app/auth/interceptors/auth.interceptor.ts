@@ -18,7 +18,7 @@ export function authInterceptor(
   const authFacade = inject(AUTH_FACADE);
   const tokenStorageService = inject(TokenStorageService);
 
-  const handle401 = () => {
+  const handleAuthError = () => {
     authFacade.logout();
     return EMPTY;
   };
@@ -42,7 +42,8 @@ export function authInterceptor(
       // Handle global error status
       switch (error.status) {
         case 401:
-          return handle401();
+        case 403:
+          return handleAuthError();
         // Add more error status handling here (e.g. 403)
         default:
           // Rethrow the error as is

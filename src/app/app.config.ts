@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
@@ -20,6 +20,7 @@ import { metaReducers } from './auth/store/auth.meta-reducers';
 import { authInterceptor } from './auth/interceptors';
 import { AUTH_FACADE } from './auth/tokens';
 import { AuthFacade } from './auth/store/auth.facade';
+import { ScrollService } from './core/services';
 
 const MyPreset = definePreset(Aura, {
   // semantic: {
@@ -99,7 +100,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(AppRoutes),
+    provideRouter(
+      AppRoutes,
+      // withInMemoryScrolling({
+      //   scrollPositionRestoration: 'top',
+      //   anchorScrolling: 'enabled'
+      // })
+    ),
     providePrimeNG({
       theme: {
         preset: MyPreset,
@@ -120,6 +127,10 @@ export const appConfig: ApplicationConfig = {
     },
     MessageService,
     ConfirmationService,
-    FilterService
+    FilterService,
+    {
+      provide: ScrollService,
+      useClass: ScrollService
+    }
   ],
 };
