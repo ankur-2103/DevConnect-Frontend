@@ -20,15 +20,12 @@ export class AuthFacade implements IAuthFacade {
   readonly isLoadingLogin$ = this.store.select(
     AuthSelectors.selectIsLoadingLogin
   );
+  readonly isRegistered$ = this.store.select(AuthSelectors.selectIsRegistered);
   readonly hasLoginError$ = this.store.select(AuthSelectors.selectLoginError);
 
-  checkLogin() {
-    this.store.dispatch(LoginActions.checkLogin());
-  }
-
-  login(username: string, password: string) {
+  login(usernameOrEmail: string, password: string) {
     this.store.select((state) => state.auth).subscribe((authState) => {});
-    this.store.dispatch(LoginActions.login({ username, password }));
+    this.store.dispatch(LoginActions.login({ usernameOrEmail, password }));
   }
 
   register(username: string, email: string, password: string) {
@@ -46,5 +43,9 @@ export class AuthFacade implements IAuthFacade {
 
   clearError() {
     this.store.dispatch(HandleErrors.clear());
+  }
+
+  clearIsRegistered() {
+    this.store.dispatch(LoginActions.clearIsRegister());
   }
 }

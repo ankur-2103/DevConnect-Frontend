@@ -33,6 +33,7 @@ export class PostHandlerComponent implements OnChanges {
   @ViewChild('editor') editor!: Editor;
 
   postForm: FormGroup;
+  isGenerating = false;
 
   editorModules = {
     toolbar: [
@@ -77,7 +78,7 @@ export class PostHandlerComponent implements OnChanges {
 
   onEditorChange(event: any) {
     let content = event.htmlValue;
-    debugger;
+    ;
     const editorElement = document.querySelector('#content .ql-editor');
     if (editorElement) {
       content = editorElement.innerHTML; // Includes classes like ql-list, ql-align, etc.
@@ -88,20 +89,53 @@ export class PostHandlerComponent implements OnChanges {
     if (quillEditor) {
       // Get the full HTML content including attributes (like styles, classes)
       const htmlContent = quillEditor.root.innerHTML;
-      console.log('HTML Output:', htmlContent);
       this.postForm.get('content')?.setValue(htmlContent);
       this.postForm.value
     } else {
       console.warn('Quill instance not found!');
     }
-    
-    console.log("🚀 ~ PostHandlerComponent ~ onEditorChange ~ this.postForm.value:", this.postForm.value)
-
 
     // Check if content is effectively empty
     if (content === '<p></p>' || content === '') {
       this.postForm.get('content')?.setErrors({ required: true });
     }
+  }
+
+  onGenratePost() {
+    const prompt = this.postForm.get('prompt')?.value;
+    if (!prompt) {
+      this._messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please enter a prompt to generate post',
+        life: 3000,
+      });
+      return;
+    }
+
+    this.isGenerating = true;
+    this.postForm.get('prompt')?.disable();
+    
+    this._postService.generatePost(prompt).subscribe({
+      next: (response) => {
+        if (this.editor) {
+          this.editor.writeValue(response.post);
+        }
+      },
+      error: (error) => {
+        console.error('Error generating post:', error);
+        this._messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to generate post. Please try again.',
+          life: 4000,
+        });
+      },
+      complete: () => {
+        this.isGenerating = false;
+        this.postForm.get('prompt')?.enable();
+      }
+    });
   }
 
   onSubmit() {
@@ -122,7 +156,6 @@ export class PostHandlerComponent implements OnChanges {
       if (file) {
         formData.append('file', file);
       }
-      debugger;
       const request$ = this.postData
         ? this._postService.updatePost(this.postData._id, formData)
         : this._postService.createPost(formData);

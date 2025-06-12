@@ -24,6 +24,13 @@ import { FileSelectEvent } from 'primeng/fileupload';
   styleUrl: './profile-update.component.scss',
 })
 export class ProfileUpdateComponent implements OnChanges {
+  @Input() userData?: AuthUser;
+  @Input() isOpen: boolean = false;
+  @Input() title: string = 'Update Profile';
+  @Input() closable: boolean = true;
+  @Output() isOpenChange = new EventEmitter<boolean>();
+  @Output() profileUpdated = new EventEmitter<void>();
+  
   user: AuthUser = {
     _id: '',
     name: '',
@@ -41,11 +48,6 @@ export class ProfileUpdateComponent implements OnChanges {
     updatedAt: '',
   };
 
-  @Input() isOpen: boolean = false;
-  @Input() title: string = 'Update Profile';
-  @Input() closable: boolean = true;
-  @Output() isOpenChange = new EventEmitter<boolean>();
-  @Output() profileUpdated = new EventEmitter<void>();
   profileUpdatedForm: FormGroup;
 
   constructor(
@@ -57,25 +59,33 @@ export class ProfileUpdateComponent implements OnChanges {
     private _profileService: ProfileService
   ) {
     this.profileUpdatedForm = _profileFormBuilder.updateProfile(_fb);
+    
+    // Subscribe to auth user changes
     this._authFacade.authUser$.subscribe((state) => {
       if (state) {
-        this.user = state;
-        this.profileUpdatedForm = _profileFormBuilder.updateProfile(_fb, state);
+        // Only update if userData is not provided
+        if (!this.userData) {
+          this.user = state;
+          this.updateForm(state);
+        }
       }
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['isOpen']) {
-      if (this.isOpen) {
-        // Reset form when dialog opens
-        // this._authFacade.authUser$.subscribe((state) => {
-        //   if (state) {
-        //     this.profileUpdatedForm = this._profileFormBuilder.updateProfile(this._fb, state);
-        //   }
-        // });
-      }
+    if (changes['isOpen'] && this.isOpen) {
+      // Reset form when dialog opens
+      this.updateForm(this.userData || this.user);
     }
+    
+    if (changes['userData'] && this.userData) {
+      this.user = this.userData;
+      this.updateForm(this.userData);
+    }
+  }
+
+  private updateForm(userData: AuthUser) {
+    this.profileUpdatedForm = this._profileFormBuilder.updateProfile(this._fb, userData);
   }
 
   onFileSelect(event: FileSelectEvent) {
@@ -85,7 +95,6 @@ export class ProfileUpdateComponent implements OnChanges {
 
   onSubmit() {
     if (this.profileUpdatedForm.valid) {
-      debugger
       const formValue = this.profileUpdatedForm.value;
       const file = this.profileUpdatedForm.get('file')?.value;
 
@@ -132,10 +141,7 @@ export class ProfileUpdateComponent implements OnChanges {
   closeDialog() {
     this.isOpen = false;
     this.isOpenChange.emit(false);
-    this.profileUpdatedForm = this._profileFormBuilder.updateProfile(
-      this._fb,
-      this.user
-    );
+    this.updateForm(this.userData || this.user);
   }
 
   get skills() {

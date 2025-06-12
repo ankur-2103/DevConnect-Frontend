@@ -23,11 +23,80 @@
         <p-editor
           #editor
           id="content"
-          [style]="{ height: '320px', 'word-break': 'break-all', 'overflow-wrap': 'break-word' }"
+          [style]="{
+            height: '320px',
+            'word-break': 'break-all',
+            'overflow-wrap': 'break-word'
+          }"
           (onTextChange)="onEditorChange($event)"
-          [modules]="editorModules" 
-        ></p-editor>
+        >
+          <ng-template #header>
+            <span class="ql-formats">
+              <!-- Heading -->
+              <select class="ql-header">
+                <option selected></option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+              </select>
+
+              <!-- Font Styles -->
+              <select class="ql-font"></select>
+
+              <!-- Bold, Italic, Underline -->
+              <button class="ql-bold" aria-label="Bold"></button>
+              <button class="ql-italic" aria-label="Italic"></button>
+              <button class="ql-underline" aria-label="Underline"></button>
+
+              <!-- Text Color & Background Color -->
+              <select class="ql-color"></select>
+              <select class="ql-background"></select>
+
+              <!-- Lists -->
+              <button
+                class="ql-list"
+                value="ordered"
+                aria-label="Ordered List"
+              ></button>
+              <button
+                class="ql-list"
+                value="bullet"
+                aria-label="Bullet List"
+              ></button>
+
+              <!-- Insert Link -->
+              <button class="ql-link" aria-label="Insert Link"></button>
+            </span>
+          </ng-template>
+        </p-editor>
       </app-input-wrapper>
+    </div>
+    <!-- [modules]="editorModules"  -->
+
+    <div class="mb-6">
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <p-inputicon styleClass="pi pi-microchip-ai" />
+        </p-inputgroup-addon>
+        <input
+          type="text"
+          pInputText
+          formControlName="prompt"
+          placeholder="Generate with AI...."
+          class="w-full"
+        />
+        <p-inputgroup-addon>
+          <p-button 
+            [disabled]="!postForm.get('prompt')?.value || isGenerating" 
+            [loading]="isGenerating"
+            icon="pi pi-send" 
+            styleClass="h-full" 
+            class="h-full"
+            (onClick)="onGenratePost()"
+          >
+          </p-button>
+        </p-inputgroup-addon>
+      </p-inputgroup>
     </div>
 
     <p-fileupload

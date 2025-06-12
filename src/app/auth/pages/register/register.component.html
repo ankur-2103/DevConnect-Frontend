@@ -66,9 +66,10 @@
       <button
         pButton
         type="submit"
-        label="Login"
+        [label]="isLoading ? 'Registering...' : 'Register'"
         class="w-full mt-2"
-        [disabled]="registerForm.invalid"
+        [disabled]="registerForm.invalid || isLoading"
+        [loading]="isLoading"
       ></button>
     </form>
   </div>

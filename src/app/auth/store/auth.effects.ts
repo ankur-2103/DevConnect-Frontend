@@ -42,7 +42,7 @@ export class AuthEffects {
       ofType(LoginActions.login),
       exhaustMap((credentials) => {
         return this.authService
-          .login(credentials.username, credentials.password)
+          .login(credentials.usernameOrEmail, credentials.password)
           .pipe(
             map((data) => {
               // Save tokens
@@ -75,7 +75,7 @@ export class AuthEffects {
               map((data) => {
                 // Save tokens
                 // Trigger login success action
-                return LoginActions.success();
+                return LoginActions.registerSuccess();
               }),
               catchError((error) => {
                 return of(LoginActions.failure({ error }));
@@ -98,6 +98,19 @@ export class AuthEffects {
       })
     );
   });
+
+  readonly onRegisterSuccess$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(LoginActions.registerSuccess),
+        map(() => {
+          // Add a small delay to ensure the success message is shown
+          this.router.navigateByUrl('/auth/login');
+        })
+      );
+    },
+    { dispatch: false }
+  );
 
   readonly logout$ = createEffect(
     () => {

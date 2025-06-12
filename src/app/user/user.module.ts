@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { UserRoutingModule } from './user-routing.module';
 import { AuthFacade } from '../auth/store/auth.facade';
@@ -37,6 +38,12 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { ImageModule } from 'primeng/image';
 import { RippleModule } from 'primeng/ripple';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ScrollService } from '../core/services';
+
 @NgModule({
   declarations: [
     UserComponent,
@@ -50,6 +57,7 @@ import { RippleModule } from 'primeng/ripple';
     PostCardComponent,
     PostViewComponent,
     CommentsComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     ImageCropperComponent,
@@ -65,6 +73,7 @@ import { RippleModule } from 'primeng/ripple';
     InputWrapperComponent,
     InputTextModule,
     ReactiveFormsModule,
+    FormsModule,
     EditorModule,
     SkeletonModule,
     ProgressSpinnerModule,
@@ -76,8 +85,12 @@ import { RippleModule } from 'primeng/ripple';
     ScrollerModule,
     FileUploadModule,
     ImageModule,
-    RippleModule
+    RippleModule,
+    InputGroupAddonModule,
+    InputGroupModule,
+    MultiSelectModule,
   ],
+  providers: [ScrollService]
 })
 export class UserModule {
   constructor(private _authFacade: AuthFacade) {

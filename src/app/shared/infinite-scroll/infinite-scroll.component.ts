@@ -11,6 +11,7 @@ export class InfiniteScrollComponent<T> implements OnInit, OnDestroy {
   @Input() loadMoreData!: (page: number) => Promise<{ items: T[], hasMore: boolean }>;
   @Input() itemTemplate!: any;
   @Input() loadingTemplate!: any;
+  @Input() emptyMessage: string = 'No items found';
   @Input() initialPage: number = 1;
   @Input() rootMargin: string = '100px';
   @Input() threshold: number = 0.1;
@@ -87,7 +88,6 @@ export class InfiniteScrollComponent<T> implements OnInit, OnDestroy {
       } else {
         this.items = [...this.items, ...(response.items || [])];
       }
-      console.log("🚀 ~ InfiniteScrollComponent<T> ~ loadData ~ this.items:", this.items)
       
       this.currentPage = page;
       this.hasMore = response.hasMore;

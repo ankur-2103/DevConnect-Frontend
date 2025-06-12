@@ -20,13 +20,13 @@ export class ProfileService {
   }
 
   searchUsers(
-    query: string,
+    search: string,
     page: number = 1
   ): Observable<PaginatedResponse<AuthUser>> {
     return this._httpService.get<PaginatedResponse<AuthUser>>(
       `${this.PROFILE_ENDPOINT}/search`,
       {
-        query,
+        search,
         page,
       }
     );

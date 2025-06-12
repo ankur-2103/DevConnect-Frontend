@@ -15,6 +15,10 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables)
+
 
 @Component({
   selector: 'app-root',

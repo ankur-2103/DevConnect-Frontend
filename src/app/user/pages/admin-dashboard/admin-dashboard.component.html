@@ -1,0 +1,98 @@
+<div class="px-4">
+  <!-- Overview cards -->
+
+  <div class="bg-white rounded-lg h-[80vh]">
+    <canvas #lineChartCanvas class=""></canvas>
+  </div>
+
+  <div class="flex flex-col md:flex-row gap-4 mt-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+      <div class="p-4 bg-blue-500 text-white rounded shadow">
+        <div class="text-xl font-semibold">Total Users</div>
+        <div class="text-3xl">{{ overview.totalUsers }}</div>
+      </div>
+      <div class="p-4 bg-green-500 text-white rounded shadow">
+        <div class="text-xl font-semibold">Total Posts</div>
+        <div class="text-3xl">{{ overview.totalPosts }}</div>
+      </div>
+      <div class="p-4 bg-yellow-500 text-white rounded shadow">
+        <div class="text-xl font-semibold">Total Comments</div>
+        <div class="text-3xl">{{ overview.totalComments }}</div>
+      </div>
+      <div class="p-4 bg-purple-500 text-white rounded shadow">
+        <div class="text-xl font-semibold">New Users (7d)</div>
+        <div class="text-3xl">{{ overview.newUsers }}</div>
+      </div>
+      <div class="p-4 bg-orange-500 text-white rounded shadow">
+        <div class="text-xl font-semibold">New Posts (7d)</div>
+        <div class="text-3xl">{{ overview.newPosts }}</div>
+      </div>
+      <div class="p-4 bg-pink-500 text-white rounded shadow">
+        <div class="text-xl font-semibold">New Comments (7d)</div>
+        <div class="text-3xl">{{ overview.newComments }}</div>
+      </div>
+    </div>
+    <div class="max-h-80 w-fit">
+      <canvas #pieChartCanvas></canvas>
+    </div>
+  </div>
+
+  <!-- Recent Posts -->
+  <div class="mt-6">
+    <h2 class="text-2xl font-semibold mb-2">Recent Posts</h2>
+    <div class="space-y-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <app-post-view
+          *ngFor="let post of recentPosts"
+          [postData]="post"
+        ></app-post-view>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Users -->
+  <div class="my-6">
+    <h2 class="text-2xl font-semibold mb-2">Recent Users</h2>
+    <div class="space-y-2">
+      <div
+        *ngFor="let user of recentUsers"
+        class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row md:items-center gap-4"
+      >
+        <div class="flex flex-1 gap-4">
+          <!-- User Avatar -->
+          <div class="rounded-full overflow-hidden">
+            @if(user && user.avatar != ''){
+            <p-avatar
+              [image]="user.avatar"
+              shape="circle"
+              size="large"
+              styleClass="object-cover"
+            ></p-avatar>
+            }@else {
+            <p-avatar
+              icon="pi pi-user"
+              shape="circle"
+              size="large"
+              styleClass="bg-gray-200 text-gray-600"
+            ></p-avatar>
+            }
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-gray-900">{{ user.name }}</h3>
+            <p class="text-sm line-clamp-2 text-gray-600">
+              {{ user.bio || "No bio" }}
+            </p>
+          </div>
+        </div>
+
+        <p-button
+          label="View Profile"
+          icon="pi pi-user"
+          class="w-full md:w-fit"
+          styleClass="w-full md:w-fit"
+          [routerLink]="['/user', route.profileById.url, user._id]"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</div>

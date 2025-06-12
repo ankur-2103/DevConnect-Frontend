@@ -9,6 +9,7 @@ export enum TokenStatus {
 
 export interface AuthStateModel {
   isLoggedIn: boolean;
+  isRegistered: boolean;
   user?: AuthUser;
   accessTokenStatus: TokenStatus;
   refreshTokenStatus: TokenStatus;

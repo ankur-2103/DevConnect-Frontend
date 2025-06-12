@@ -11,7 +11,8 @@ export class PostFormHandler {
       _id: [{ value: data?._id || '', disabled: !data?._id }],
       content: [data?.content || '', [Validators.required]],
       docUrl: [data?.docUri || ''],
-      file: []
+      file: [],
+      prompt: ['']
     });
   }
 }

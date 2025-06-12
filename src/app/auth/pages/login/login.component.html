@@ -1,4 +1,6 @@
-<div class="flex justify-center items-center h-[90vh] md:h-screen bg-gray-100 p-4 md:p-0">
+<div
+  class="flex justify-center items-center h-[90vh] md:h-screen bg-gray-100 p-4 md:p-0"
+>
   <div class="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
     <h2 class="text-2xl font-bold text-center mb-4 text-primary-800">Login</h2>
     <!-- <p-button
@@ -11,16 +13,16 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <app-input-wrapper
-        [control]="loginForm.get('email')"
+        [control]="loginForm.get('usernameOrEmail')"
         [errorMessages]="{
-          required: 'Email is required',
+          required: 'Usernae or Email is required',
           email: 'Invalid email'
         }"
-        label="Email"
+        label="Username or Email"
       >
         <input
           pInputText
-          formControlName="email"
+          formControlName="usernameOrEmail"
           class="w-full p-2 border rounded-md"
         />
       </app-input-wrapper>
@@ -33,11 +35,6 @@
         }"
         label="Password"
       >
-        <!-- <input
-          pPassword
-          formControlName="password"
-          class="w-full p-2 border rounded-md"
-        /> -->
         <p-password
           formControlName="password"
           [feedback]="false"
@@ -48,14 +45,21 @@
         ></p-password>
       </app-input-wrapper>
 
-      <span class="text-sm md:text-base"
-        >Don't have account,
+      <div class="flex flex-col md:flex-row justify-between gap-3">
+        <span class="text-sm md:text-base"
+          >Don't have account,
+          <span
+            [routerLink]="registerRoute"
+            class="cursor-pointer text-blue-600 font-semibold underline underline-offset-2"
+            >Register here!</span
+          >
+        </span>
         <span
-          [routerLink]="registerRoute"
-          class="cursor-pointer text-blue-600 font-semibold underline underline-offset-2"
-          >Register here!</span
+          [routerLink]="forgotPasswordRoute"
+          class="cursor-pointer text-sm md:text-base text-blue-600 font-semibold underline underline-offset-2"
+          >Forgot Password?</span
         >
-      </span>
+      </div>
 
       <button
         pButton

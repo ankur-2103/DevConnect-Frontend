@@ -28,17 +28,23 @@
           [image]="postData.user.avatar"
           shape="circle"
           size="normal"
-          styleClass="object-cover"
+          styleClass="object-cover cursor-pointer"
+          [routerLink]="['/user', route.profileById.url, postData.user._id]"
         ></p-avatar>
         }@else {
         <p-avatar
           icon="pi pi-user"
           shape="circle"
           size="normal"
-          styleClass="bg-gray-200 text-gray-600"
+          styleClass="bg-gray-200 text-gray-600 cursor-pointer"
+          [routerLink]="['/user', route.profileById.url, postData.user._id]"
         ></p-avatar>
         }
-        <span class="font-medium text-gray-900">{{ postData.user.name }}</span>
+        <span
+          class="font-medium text-gray-900 cursor-pointer hover:underline"
+          [routerLink]="['/user', route.profileById.url, postData.user._id]"
+          >{{ postData.user.name }}</span
+        >
       </div>
       <span class="text-sm text-gray-500">
         {{ postData.createdAt | timeAgo }}
@@ -59,7 +65,12 @@
         ></div>
         @if(postData.docUri) {
         <div class="mt-3">
-          <p-image [src]="postData.docUri" imageClass="object-" alt="Image" [preview]="true" />
+          <p-image
+            [src]="postData.docUri"
+            imageClass="object-"
+            alt="Image"
+            [preview]="true"
+          />
         </div>
         }
       </div>
@@ -82,7 +93,7 @@
 
     <!-- Post Footer -->
     <div
-      class="flex justify-between items-center pt-2 border-t-2 border-gray-100"
+      class="flex flex-wrap justify-between items-center pt-2 border-t-2 border-gray-100"
     >
       <div class="flex items-center gap-2">
         <!-- Like Button -->

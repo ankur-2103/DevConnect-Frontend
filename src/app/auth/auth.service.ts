@@ -31,21 +31,19 @@ export class AuthService {
    * @param {string} password
    * @returns Observable<AccessData>
    */
-  login(username: string, password: string): Observable<AccessData> {
+  login(usernameOrEmail: string, password: string): Observable<AccessData> {
     return this.http.post<AccessData>(`${this.hostUrl}/api/auth/signin`, {
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-      grant_type: 'password',
-      username,
+      usernameOrEmail,
       password,
     });
   }
 
-  register(username: string, email: string, password: string): Observable<AccessData> {
+  register(
+    username: string,
+    email: string,
+    password: string
+  ): Observable<AccessData> {
     return this.http.post<AccessData>(`${this.hostUrl}/api/auth/signup`, {
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-      grant_type: 'password',
       username,
       email,
       password,
@@ -86,6 +84,26 @@ export class AuthService {
     });
   }
 
+  forgetPassword(usernameOrEmail: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.hostUrl}/api/auth/forgotPassword`,
+      { usernameOrEmail }
+    );
+  }
+
+  resetPassword(
+    token: string,
+    newPassword: string
+  ): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.hostUrl}/api/auth/resetPassword`,
+      {
+        token,
+        newPassword,
+      }
+    );
+  }
+
   /**
    * Returns authenticated user
    * based on saved access token
@@ -94,5 +112,18 @@ export class AuthService {
    */
   getAuthUser(): Observable<AuthUser> {
     return this.http.get<AuthUser>(`${this.hostUrl}/api/user/me`);
+  }
+
+  updateUserRoles(
+    userId: string,
+    roles: number[]
+  ): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.hostUrl}/api/auth/updateRoles`,
+      {
+        userId,
+        roles,
+      }
+    );
   }
 }
